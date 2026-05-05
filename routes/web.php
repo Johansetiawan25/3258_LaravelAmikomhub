@@ -25,4 +25,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('events', EventAdminController::class);
 });
 
-
+// Route admin/trancation/index
+Route::get('/admin/transactions', function () {
+    return view('admin.transactions.index');
+})->name('admin.transactions.index');
