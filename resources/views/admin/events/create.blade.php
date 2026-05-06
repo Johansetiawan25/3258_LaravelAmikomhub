@@ -44,10 +44,17 @@
 
         <!-- Harga & Stok -->
         <div class="grid grid-cols-2 gap-6">
-            <input type="number" name="price" value="{{ old('price',0) }}" class="px-5 py-4 bg-slate-50 rounded-2xl">
-            <input type="number" name="stock" value="{{ old('stock',1) }}" class="px-5 py-4 bg-slate-50 rounded-2xl">
+            <div>
+                <label class="block text-sm font-bold mb-2">Harga</label>
+                <input type="number" name="price" value="{{ old('price',0) }}" class="px-5 py-4 bg-slate-50 rounded-2xl">
+            </div>
+            <div>
+                <label class="block text-sm font-bold mb-2">Stok</label>
+                <input type="number" name="stock" value="{{ old('stock',1) }}" class="px-5 py-4 bg-slate-50 rounded-2xl">
+            </div>
         </div>
 
+        
         <!-- Tombol -->
         <div class="flex justify-between items-center pt-4">
             <a href="{{ route('admin.events.index') }}"
