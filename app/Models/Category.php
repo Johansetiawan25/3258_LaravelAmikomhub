@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    public function index()
+    protected $fillable = ['name', 'slug'];
+
+    // Menandakan atribut: 1 Kategori dapat memiliki banyak list Event
+    public function events()
     {
-        $categories = Category::withCount('events')->get();
-        return view('admin.categories.index', compact('categories'));
+        return $this->hasMany(Event::class);
     }
+
 }

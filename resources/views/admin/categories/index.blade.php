@@ -37,57 +37,37 @@
             </thead>
 
             <tbody class="divide-y divide-slate-100">
-
-                {{-- DATA DUMMY --}}
-                @php
-                $categories = [
-                ['id' => 1, 'name' => 'Seminar', 'slug' => 'seminar', 'total' => 5],
-                ['id' => 2, 'name' => 'Konser', 'slug' => 'konser', 'total' => 3],
-                ['id' => 3, 'name' => 'Workshop', 'slug' => 'workshop', 'total' => 8],
-                ['id' => 4, 'name' => 'Hackathon', 'slug' => 'hackathon', 'total' => 2],
-                ];
-                @endphp
-
+                
                 @forelse($categories as $index => $category)
                 <tr class="hover:bg-slate-50 transition">
 
-                    <!-- No -->
                     <td class="px-6 py-4 text-slate-400 font-semibold">
                         {{ $index + 1 }}
                     </td>
 
-                    <!-- Nama -->
                     <td class="px-6 py-4 font-semibold text-slate-800">
                         <span class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-lg">
-                            {{ $category['name'] }}
+                            {{ $category->name }}
                         </span>
                     </td>
 
-                    <!-- Slug -->
                     <td class="px-6 py-4 text-slate-500 font-mono text-xs">
-                        {{ $category['slug'] }}
+                        {{ $category->slug }}
                     </td>
 
-                    <!-- Total -->
                     <td class="px-6 py-4 text-slate-600">
-                        {{ $category['total'] }} event
+                        {{ $category->events_count }} event
                     </td>
 
-                    <!-- Aksi -->
                     <td class="px-6 py-4">
                         <div class="flex gap-2">
-
-                            <!-- EDIT -->
                             <button class="px-3 py-1.5 bg-amber-50 text-amber-600 rounded-lg font-bold text-xs hover:bg-amber-100 transition flex items-center gap-1">
                                 ✏️ Edit
                             </button>
-
-                            <!-- DELETE -->
                             <button onclick="return confirm('Yakin hapus kategori ini?')"
                                 class="px-3 py-1.5 bg-red-50 text-red-600 rounded-lg font-bold text-xs hover:bg-red-100 transition flex items-center gap-1">
                                 🗑️ Hapus
                             </button>
-
                         </div>
                     </td>
 
