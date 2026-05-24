@@ -20,10 +20,43 @@
             </p>
         </div>
 
-        <a href="{{ route('admin.partners.create') }}"
-            class="px-5 py-3 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition">
-            + Tambah Partner
-        </a>
+        <div class="flex justify-between items-center mb-6">
+            <a href="{{ route('admin.partners.create') }}"
+                class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 4v16m8-8H4" />
+                </svg>
+                Tambah Partner
+            </a>
+        </div>
+        
+    </div>
+
+    <!-- Search -->
+    <div class="p-6 border-b border-slate-100">
+
+        <form method="GET"
+            action="{{ route('admin.partners.index') }}"
+            class="flex gap-3">
+
+            <input type="text"
+                name="search"
+                value="{{ request('search') }}"
+                placeholder="Cari partner..."
+                class="w-full max-w-sm px-5 py-3 border border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500">
+
+            <button type="submit"
+                class="px-5 py-3 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition">
+                Search
+            </button>
+
+            <a href="{{ route('admin.partners.index') }}"
+                class="px-5 py-3 bg-slate-200 text-slate-700 rounded-2xl font-bold hover:bg-slate-300 transition">
+                Reset
+            </a>
+
+        </form>
 
     </div>
 

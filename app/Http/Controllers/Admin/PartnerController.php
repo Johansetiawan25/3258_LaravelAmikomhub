@@ -6,11 +6,19 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Partner;
 
+
 class PartnerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $partners = Partner::latest()->get();
+        $query = Partner::query();
+
+        // fitur search
+        if ($request->search) {
+            $query->where('name', 'LIKE', '%' . $request->search . '%');
+        }
+
+        $partners = $query->latest()->get();
 
         return view('admin.partners.index', compact('partners'));
     }

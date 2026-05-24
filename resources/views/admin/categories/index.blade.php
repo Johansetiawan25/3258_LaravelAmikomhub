@@ -19,6 +19,29 @@
         </a>
     </div>
 
+    <!--Search-->
+    <form method="GET"
+        action="{{ route('admin.categories.index') }}"
+        class="mb-6 flex gap-3">
+
+        <input type="text"
+            name="search"
+            value="{{ request('search') }}"
+            placeholder="Cari kategori..."
+            class="w-full max-w-sm px-5 py-3 border border-slate-200 rounded-2xl focus:outline-none focus:border-indigo-500">
+
+        <button type="submit"
+            class="px-5 py-3 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition">
+            Search
+        </button>
+
+        <a href="{{ route('admin.categories.index') }}"
+            class="px-5 py-3 bg-slate-200 text-slate-700 rounded-2xl font-bold hover:bg-slate-300 transition">
+            Reset
+        </a>
+
+    </form>
+
     <!-- Table -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
         <table class="w-full text-sm">
