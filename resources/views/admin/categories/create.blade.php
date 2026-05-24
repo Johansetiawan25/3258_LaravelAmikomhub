@@ -9,21 +9,19 @@
 
     <h1 class="text-2xl font-bold mb-6">Tambah Kategori</h1>
 
-    <form action="{{ route('admin.categories.store') }}" method="POST">
+    <form action="{{ route('admin.categories.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="mb-4">
             <label class="block mb-2 font-semibold">
-                Nama Kategori
+                Logo Kategori
             </label>
 
-            <input type="text"
-                name="name"
-                value="{{ old('name') }}"
-                class="w-full border rounded-xl px-4 py-3"
-                required>
+            <input type="file"
+                name="logo_url"
+                class="w-full border rounded-xl px-4 py-3">
 
-            @error('name')
+            @error('logo_url')
             <p class="text-red-500 text-sm mt-2">
                 {{ $message }}
             </p>
