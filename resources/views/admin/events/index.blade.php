@@ -70,7 +70,7 @@
                     <!-- Aksi -->
                     <td class="px-8 py-6">
                         <div class="flex gap-2">
-                             <a href="{{ route('admin.events.edit', $event->id) }}"
+                            <a href="{{ route('admin.events.edit', $event->id) }}"
                                 class="p-2.5 bg-indigo-50 text-indigo-600 rounded-xl hover:bg-indigo-600 hover:text-white transition">
                                 ✏️
                             </a>
