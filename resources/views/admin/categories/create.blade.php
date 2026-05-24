@@ -14,14 +14,16 @@
 
         <div class="mb-4">
             <label class="block mb-2 font-semibold">
-                Logo Kategori
+                Nama Kategori
             </label>
 
-            <input type="file"
-                name="logo_url"
-                class="w-full border rounded-xl px-4 py-3">
+            <input type="text"
+                name="name"
+                value="{{ old('name') }}"
+                class="w-full border rounded-xl px-4 py-3"
+                required>
 
-            @error('logo_url')
+            @error('name')
             <p class="text-red-500 text-sm mt-2">
                 {{ $message }}
             </p>
