@@ -21,15 +21,27 @@
             <input type="text"
                 name="name"
                 value="{{ old('name', $category->name) }}"
-                class="w-full border rounded-xl px-4 py-3"
+                class="w-full border rounded-xl px-4 py-3 @error('name') border-red-500 @enderror"
                 required>
+
+            @error('name')
+            <p class="text-red-500 text-sm mt-1">
+                {{ $message }}
+            </p>
+            @enderror
         </div>
 
-        <button type="submit"
-            class="bg-indigo-600 text-white px-6 py-3 rounded-xl">
-            Update
-        </button>
+        <div class="flex gap-3">
+            <a href="{{ route('admin.categories.index') }}"
+                class="bg-gray-300 text-gray-800 px-6 py-3 rounded-xl hover:bg-gray-400">
+                Batal
+            </a>
 
+            <button type="submit"
+                class="bg-indigo-600 text-white px-6 py-3 rounded-xl">
+                Update
+            </button>
+        </div>
     </form>
 </div>
 @endsection
