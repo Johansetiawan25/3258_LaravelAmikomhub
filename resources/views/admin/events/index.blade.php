@@ -7,7 +7,7 @@
 @section('content')
 
 <!-- Tombol tambah -->
-<div class="mb-4 text-right">
+<div class="mb-4 text-left">
     <a href="{{ route('admin.events.create') }}"
         class="inline-block px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 active:scale-95 transition">
         + Tambah Event Baru

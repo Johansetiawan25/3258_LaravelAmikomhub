@@ -9,11 +9,6 @@
 
     <!-- Header -->
     <div class="flex justify-between items-center mb-6">
-        <div>
-            <h1 class="text-2xl font-extrabold text-slate-800">Manajemen Kategori</h1>
-            <p class="text-sm text-slate-500 mt-1">Kelola kategori event yang tersedia</p>
-        </div>
-
         <button class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
