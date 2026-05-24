@@ -7,10 +7,14 @@
 @section('content')
 
 <!-- Tombol tambah -->
-<div class="mb-4 text-right">
+<div class="flex justify-between items-center mb-6">
     <a href="{{ route('admin.events.create') }}"
-        class="inline-block px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 active:scale-95 transition">
-        + Tambah Event Baru
+        class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 4v16m8-8H4" />
+        </svg>
+        Tambah Event Baru
     </a>
 </div>
 
@@ -70,7 +74,7 @@
                     <!-- Aksi -->
                     <td class="px-8 py-6">
                         <div class="flex gap-2">
-                             <a href="{{ route('admin.events.edit', $event->id) }}"
+                            <a href="{{ route('admin.events.edit', $event->id) }}"
                                 class="p-2.5 bg-indigo-50 text-indigo-600 rounded-xl hover:bg-indigo-600 hover:text-white transition">
                                 ✏️
                             </a>
