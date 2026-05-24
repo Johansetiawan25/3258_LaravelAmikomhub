@@ -52,32 +52,122 @@
     </div>
 </section>
 
+<!-- Partner Section -->
+<section class="relative py-24 overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-100">
+
+    <!-- Top Glow -->
+    <div
+        class="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-indigo-400/10 via-purple-400/10 to-pink-400/10 blur-3xl">
+    </div>
+
+    <div class="relative max-w-7xl mx-auto px-6">
+
+        <!-- Heading -->
+        <div class="text-center mb-16">
+
+            <span
+                class="inline-block px-4 py-2 bg-indigo-100 text-indigo-700 rounded-full text-sm font-bold uppercase tracking-widest mb-4">
+                Official Partner
+            </span>
+
+            <h2 class="text-5xl font-black text-slate-900 leading-tight mb-4">
+                Didukung Oleh <span class="text-indigo-600">Partner Terbaik</span>
+            </h2>
+
+            <p class="text-slate-500 text-lg max-w-2xl mx-auto leading-relaxed">
+                Berbagai brand, komunitas, dan perusahaan terpercaya ikut mendukung pengalaman event terbaik di
+                AmikomEventHub.
+            </p>
+
+        </div>
+
+        <!-- Partner Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+
+            @foreach($partners as $partner)
+
+            <div
+                class="group relative bg-white/80 backdrop-blur-xl border border-white/50 rounded-[2rem] p-10 min-h-[190px] flex items-center justify-center shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden">
+
+                <!-- Glow Effect -->
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-indigo-500/0 via-transparent to-purple-500/0 group-hover:from-indigo-500/10 group-hover:to-purple-500/10 transition duration-500">
+                </div>
+
+                <!-- Logo -->
+                <img src="{{ asset('storage/' . $partner->logo_url) }}"
+                    alt="{{ $partner->name }}"
+                    class="relative z-10 h-24 object-contain grayscale group-hover:grayscale-0 transition duration-500">
+
+            </div>
+
+            @endforeach
+
+        </div>
+
+    </div>
+
+</section>
+
 <!-- Events Grid -->
 <section id="events" class="max-w-7xl mx-auto px-6 py-20">
-    <div class="flex justify-between items-end mb-12">
-        <div>
-            <h2 class="text-3xl font-extrabold mb-2">Event Terdekat</h2>
-            <p class="text-slate-500 font-medium">Jangan sampai ketinggalan acara seru minggu ini!</p>
-        </div>
-        <div class="flex gap-3 flex-wrap justify-center items-center">
-            <a href="/"
-                class="px-5 py-2 rounded-xl font-semibold text-sm shadow-sm transition
-        {{ request('category') == '' || !request()->has('category') 
-            ? 'bg-indigo-600 text-white hover:bg-indigo-700' 
-            : 'bg-white border border-indigo-200 text-indigo-600 hover:bg-indigo-600 hover:text-white hover:border-indigo-600' }}">
-                Semua
-            </a>
+    <div class="relative mb-16 overflow-hidden rounded-[2rem] bg-white border border-slate-100 shadow-sm p-10">
 
-            @foreach($categories as $cat)
-            <a href="/?category={{ $cat->slug }}"
-                class="px-5 py-2 rounded-xl font-semibold text-sm shadow-sm transition
-        {{ request('category') == $cat->slug 
-            ? 'bg-indigo-600 text-white hover:bg-indigo-700' 
-            : 'bg-white border border-indigo-200 text-indigo-600 hover:bg-indigo-600 hover:text-white hover:border-indigo-600' }}">
-                {{ $cat->name }}
-            </a>
-            @endforeach
+        <!-- Blue Blur Background -->
+        <div
+            class="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-indigo-400/10 via-blue-400/10 to-purple-400/10 blur-3xl">
         </div>
+
+        <div class="relative z-10 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+
+            <!-- Text -->
+            <div>
+
+                <span
+                    class="inline-block px-4 py-2 bg-indigo-100 text-indigo-700 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
+                    Upcoming Events
+                </span>
+
+                <h2 class="text-4xl font-black text-slate-900 mb-3">
+                    Event <span class="text-indigo-600">Terdekat</span>
+                </h2>
+
+                <p class="text-slate-500 text-lg leading-relaxed max-w-2xl">
+                    Temukan konser, seminar, workshop, dan berbagai acara menarik yang sedang berlangsung minggu ini.
+                </p>
+
+            </div>
+
+            <!-- Filter -->
+            <div class="flex flex-wrap gap-3">
+
+                <!-- Semua -->
+                <a href="/"
+                    class="px-5 py-3 rounded-2xl font-semibold text-sm transition-all duration-300
+                {{ request('category') == '' || !request()->has('category') 
+                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200' 
+                    : 'bg-white border border-indigo-100 text-indigo-600 hover:bg-indigo-600 hover:text-white' }}">
+                    Semua
+                </a>
+
+                @foreach($categories as $cat)
+
+                <a href="/?category={{ $cat->slug }}"
+                    class="px-5 py-3 rounded-2xl font-semibold text-sm transition-all duration-300
+                {{ request('category') == $cat->slug 
+                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200'
+                    : 'bg-white border border-indigo-100 text-indigo-600 hover:bg-indigo-600 hover:text-white' }}">
+
+                    {{ $cat->name }}
+
+                </a>
+
+                @endforeach
+
+            </div>
+
+        </div>
+
     </div>
 
     <!-- Zona Menampilkan Grid List Event -->
