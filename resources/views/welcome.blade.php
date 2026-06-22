@@ -195,9 +195,7 @@
                 </div>
                 <div class="flex justify-between items-center pt-4 border-t">
                     <span class="text-2xl font-black text-indigo-600">Rp {{ number_format($event->price, 0, ',', '.') }}</span>
-                    <a href="{{ url('event/1') }}"
-                        class="px-5 py-2 bg-indigo-50 text-indigo-600 rounded-xl font-bold hover:bg-indigo-600 hover:text-white transition">Lihat
-                        Detail</a>
+                    <a href="{{ route('events.show', $event->id) }}" class="px-5 py-2 bg-indigo-50 text-indigo-600 rounded-xl font-bold hover:bg-indigo-600 hover:text-white transition">Lihat Detail</a>
                 </div>
             </div>
         </div>

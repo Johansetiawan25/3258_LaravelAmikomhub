@@ -11,7 +11,7 @@ use App\Http\Controllers\Admin\AuthController;
 
 // Route User Area
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/event', [EventController::class, 'show'])->name('events.show');
+Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 Route::get('/checkout', [EventController::class, 'checkout'])->name('checkout');
 Route::post('/checkout', [EventController::class, 'processCheckout'])->name('checkout.process');
 Route::get('/my-ticket', [EventController::class, 'ticket'])->name('ticket');
