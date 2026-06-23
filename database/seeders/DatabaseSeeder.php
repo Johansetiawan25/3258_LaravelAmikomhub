@@ -50,9 +50,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\Event::create([
             'category_id' => $category2->id,
             'title' => 'Jazz Night 2025',
-            'description' => 'Nikmati malam yang indah dengan alunan musik jazz
-
-yang merdu.',
+            'description' => 'Nikmati malam yang indah dengan alunan musik jazz yang merdu.',
 
             'date' => '2026-05-10 19:00:00',
             'location' => 'Amikom Baru',
