@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\Category;
+use Illuminate\Support\Facades\Storage;
 
 class EventController extends Controller
 {
@@ -53,13 +54,23 @@ class EventController extends Controller
 
     public function destroy(Event $event)
     {
+        // Hapus file poster dari storage jika ada
+        if (
+            $event->poster_path &&
+            Storage::disk('public')->exists($event->poster_path)
+        ) {
+
+            Storage::disk('public')->delete($event->poster_path);
+        }
+
+        // Hapus data event
         $event->delete();
 
         return redirect()
             ->route('admin.events.index')
             ->with('success', 'Data event berhasil dihapus secara permanen.');
     }
-
+    
     public function edit(Event $event)
     {
         $categories = Category::all();
