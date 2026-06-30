@@ -1,144 +1,191 @@
 @extends('layouts.admin')
 
-@section('title', 'Laporan Transaksi')
+@section('title', 'Laporan Transaksi - Admin')
 @section('page_title', 'Laporan Transaksi')
-@section('page_subtitle', 'Rekap seluruh transaksi pembelian tiket')
+@section('page_subtitle', 'Pantau arus kas dan penjualan tiket Anda.')
 
 @section('content')
-<div class="p-6 w-full">
 
-    <!-- HEADER -->
-    <div class="flex justify-between items-center mb-6">
-        <div>
-            <h1 class="text-2xl font-extrabold text-slate-800">Laporan Transaksi</h1>
-            <p class="text-sm text-slate-500 mt-1">Daftar transaksi pembelian tiket event</p>
+<div class="bg-white rounded-3xl border border-slate-100 shadow-lg overflow-hidden">
+
+    {{-- HEADER --}}
+    <div class="px-8 py-7 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-bold">Laporan Transaksi</h1>
+                <p class="text-sm text-white/80">Monitoring semua transaksi tiket secara real-time</p>
+            </div>
         </div>
-
-        <button class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition">
-            Export Laporan
-        </button>
     </div>
 
-    <!-- DATA DUMMY -->
-    @php
-    $transactions = [
-    ['name' => 'Donni Prabowo','email' => 'donni@example.com','event' => 'Jazz Night 2024','status' => 'Success','total' => 155000],
-    ['name' => 'Maya Sari','email' => 'maya@example.com','event' => 'AI Workshop','status' => 'Pending','total' => 55000],
-    ['name' => 'Budi Santoso','email' => 'budi@example.com','event' => 'Hackathon 2024','status' => 'Free','total' => 0],
-    ];
+    <div class="px-8 py-8">
 
-    $success = collect($transactions)->where('status','Success')->count();
-    $pending = collect($transactions)->where('status','Pending')->count();
-    $free = collect($transactions)->where('status','Free')->count();
-    @endphp
+        {{-- 📊 CARD STAT --}}
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
 
-    <!-- TABLE -->
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-        <table class="w-full text-sm">
+            <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white p-6 rounded-2xl shadow">
+                <p class="text-xs opacity-80">Total Transaksi</p>
+                <h2 class="text-3xl font-bold mt-2">{{ $totalTransactions }}</h2>
+            </div>
 
-            <thead class="bg-slate-50 border-b">
-                <tr>
-                    <th class="px-6 py-4 text-left">No</th>
-                    <th class="px-6 py-4 text-left">Nama</th>
-                    <th class="px-6 py-4 text-left">Email</th>
-                    <th class="px-6 py-4 text-left">Event</th>
-                    <th class="px-6 py-4 text-left">Status</th>
-                    <th class="px-6 py-4 text-left">Total</th>
-                </tr>
-            </thead>
+            <div class="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white p-6 rounded-2xl shadow">
+                <p class="text-xs opacity-80">Pendapatan</p>
+                <h2 class="text-2xl font-bold mt-2">
+                    Rp {{ number_format($totalRevenue,0,',','.') }}
+                </h2>
+            </div>
 
-            <tbody class="divide-y">
-                @foreach($transactions as $i => $trx)
-                <tr class="hover:bg-slate-50">
+            <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-2xl shadow">
+                <p class="text-xs opacity-80">Success</p>
+                <h2 class="text-3xl font-bold mt-2">{{ $success }}</h2>
+            </div>
 
-                    <td class="px-6 py-4 text-slate-400 font-semibold">
-                        {{ $i + 1 }}
-                    </td>
+            <div class="bg-gradient-to-r from-yellow-500 to-orange-500 text-white p-6 rounded-2xl shadow">
+                <p class="text-xs opacity-80">Pending</p>
+                <h2 class="text-3xl font-bold mt-2">{{ $pending }}</h2>
+            </div>
 
-                    <td class="px-6 py-4 font-bold text-slate-800 uppercase">
-                        {{ $trx['name'] }}
-                    </td>
-
-                    <td class="px-6 py-4 text-slate-500 text-xs">
-                        {{ $trx['email'] }}
-                    </td>
-
-                    <td class="px-6 py-4 text-slate-700">
-                        {{ $trx['event'] }}
-                    </td>
-
-                    <td class="px-6 py-4">
-                        @if($trx['status'] == 'Success')
-                        <span class="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-xs font-bold">Success</span>
-                        @elseif($trx['status'] == 'Pending')
-                        <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-lg text-xs font-bold">Pending</span>
-                        @else
-                        <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold">Free</span>
-                        @endif
-                    </td>
-
-                    <td class="px-6 py-4 font-bold text-indigo-600">
-                        Rp {{ number_format($trx['total'],0,',','.') }}
-                    </td>
-
-                </tr>
-                @endforeach
-            </tbody>
-
-        </table>
-    </div>
-
-    <!-- CHART SECTION -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-
-        <!-- BAR CHART -->
-        <div class="bg-white p-6 rounded-2xl shadow-sm border">
-            <h2 class="text-lg font-bold mb-4 text-slate-700">Transaksi per Status</h2>
-            <canvas id="barChart"></canvas>
         </div>
 
-        <!-- PIE CHART -->
-        <div class="bg-white p-6 rounded-2xl shadow-sm border">
-            <h2 class="text-lg font-bold mb-4 text-slate-700">Distribusi Status</h2>
-            <canvas id="pieChart"></canvas>
+        {{-- 🔎 FILTER --}}
+        <form method="GET" class="mb-8">
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+
+                <input type="text" name="search"
+                    value="{{ request('search') }}"
+                    placeholder="Search order / nama / email"
+                    class="px-4 py-2.5 rounded-xl border">
+
+                <select name="event" class="px-4 py-2.5 rounded-xl border">
+                    <option value="">Semua Event</option>
+                    @foreach($events as $event)
+                    <option value="{{ $event->id }}" {{ request('event') == $event->id ? 'selected' : '' }}>
+                        {{ $event->title }}
+                    </option>
+                    @endforeach
+                </select>
+
+                <select name="status" class="px-4 py-2.5 rounded-xl border">
+                    <option value="">Semua Status</option>
+                    <option value="success">Success</option>
+                    <option value="pending">Pending</option>
+                    <option value="failed">Failed</option>
+                </select>
+
+                <input type="date" name="date"
+                    value="{{ request('date') }}"
+                    class="px-4 py-2.5 rounded-xl border">
+
+            </div>
+
+            <div class="mt-5 flex gap-3">
+                <button class="px-6 py-2.5 bg-indigo-600 text-white rounded-xl">Cari</button>
+                <a href="{{ route('admin.transactions.index') }}"
+                    class="px-6 py-2.5 bg-slate-100 rounded-xl">Reset</a>
+            </div>
+
+        </form>
+
+        {{-- 📊 TABLE --}}
+        <div class="overflow-x-auto rounded-2xl">
+
+            <table class="min-w-full">
+
+                <thead class="bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-600 text-white uppercase tracking-wider text-xs font-semibold">
+                    <tr>
+                        <th class="px-10 py-5 rounded-tl-2xl">Order ID</th>
+                        <th class="px-10 py-5">Customer</th>
+                        <th class="px-10 py-5">Event</th>
+                        <th class="px-10 py-5">Tanggal</th>
+                        <th class="px-10 py-5">Status</th>
+                        <th class="px-10 py-5 text-right rounded-tr-2xl">Total</th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-slate-100">
+
+                    @forelse($transactions as $trx)
+
+                    <tr class="hover:bg-indigo-50/30 transition-all duration-300">
+
+                        <td class="px-10 py-6">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700">
+                                #{{ $trx->order_id }}
+                            </span>
+                        </td>
+
+                        <td class="px-10 py-6">
+                            <p class="font-semibold text-slate-800">{{ $trx->customer_name }}</p>
+                            <p class="text-xs text-slate-500">{{ $trx->customer_email }}</p>
+                        </td>
+
+                        <td class="px-10 py-6 text-slate-700 font-medium">
+                            {{ $trx->event->title ?? '-' }}
+                        </td>
+
+                        <td class="px-10 py-6 text-sm text-slate-500">
+                            {{ $trx->created_at->format('d M Y, H:i') }}
+                        </td>
+
+                        <td class="px-10 py-6">
+
+                            @if(in_array($trx->status, ['success','settlement']))
+                            <span class="px-3 py-1 text-xs font-bold rounded-full bg-green-100 text-green-700">
+                                Success
+                            </span>
+
+                            @elseif($trx->status == 'pending')
+                            <span class="px-3 py-1 text-xs font-bold rounded-full bg-yellow-100 text-yellow-700">
+                                Pending
+                            </span>
+
+                            @else
+                            <span class="px-3 py-1 text-xs font-bold rounded-full bg-red-100 text-red-700">
+                                {{ $trx->status }}
+                            </span>
+                            @endif
+
+                        </td>
+
+                        <td class="px-10 py-6 text-right font-extrabold text-slate-900">
+                            Rp {{ number_format($trx->total_price, 0, ',', '.') }}
+                        </td>
+
+                    </tr>
+
+                    @empty
+
+                    <tr>
+                        <td colspan="6" class="text-center py-20">
+                            <div class="text-5xl">📊</div>
+                            <p class="text-slate-400 mt-2">Belum ada transaksi</p>
+                        </td>
+                    </tr>
+
+                    @endforelse
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {{-- 📄 TOTAL BAWAH (JANGAN HILANG) --}}
+        <div class="mt-8 px-4 py-5 bg-slate-50 rounded-2xl flex justify-between items-center">
+
+            <p class="text-xs text-slate-500">
+                Menampilkan {{ $transactions->count() }} dari {{ $transactions->total() }} transaksi
+            </p>
+
+            <div>
+                {{ $transactions->links() }}
+            </div>
+
         </div>
 
     </div>
 
 </div>
-
-<!-- CHART JS -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-    const success = @json($success);
-    const pending = @json($pending);
-    const free = @json($free);
-
-    // BAR CHART
-    new Chart(document.getElementById('barChart'), {
-        type: 'bar',
-        data: {
-            labels: ['Success', 'Pending', 'Free'],
-            datasets: [{
-                label: 'Jumlah Transaksi',
-                data: [success, pending, free],
-                backgroundColor: ['#22c55e', '#f59e0b', '#64748b']
-            }]
-        }
-    });
-
-    // PIE CHART
-    new Chart(document.getElementById('pieChart'), {
-        type: 'pie',
-        data: {
-            labels: ['Success', 'Pending', 'Free'],
-            datasets: [{
-                data: [success, pending, free],
-                backgroundColor: ['#22c55e', '#f59e0b', '#64748b']
-            }]
-        }
-    });
-</script>
 
 @endsection

@@ -19,6 +19,37 @@ class CheckoutController extends Controller
 
     public function store(Request $request, Event $event)
     {
-        // Logika pembuatan transaksi menyusul di langkah berikutnya
+        // 1. Validasi Input Kredensial Pelanggan
+        $request->validate([
+            'customer_name' => 'required|string|max:255',
+            'customer_email' => 'required|email|max:255',
+            'customer_phone' => 'required|string|max:20',
+        ]);
+
+        // 2. Cegah Check-out Jika Tiket Habis
+        if ($event->stock <= 0) {
+            return back()->with('error', 'Mohon maaf, tiket untuk acara ini sudah habis.');
+        }
+
+        // 3. Generate Kode TRX (Unik)
+        $orderId = 'TRX-' . time() . '-' . Str::random(5);
+        $totalPrice = $event->price + 5000; // Menambahkan biaya admin (dummy)
+
+        // 4. Merekam Transaksi ke Database
+        $transaction = Transaction::create([
+            'event_id'        => $event->id,
+            'order_id'        => $orderId,
+            'customer_name'   => $request->customer_name,
+            'customer_email'  => $request->customer_email,
+            'customer_phone'  => $request->customer_phone,
+            'total_price'     => $totalPrice,
+            'status'          => 'Pending',
+        ]);
+
+        // 5. Kurangi stok tiket
+        $event->decrement('stock');
+
+        // 6. Arahkan ke halaman utama sementara
+        return redirect('/');
     }
 }

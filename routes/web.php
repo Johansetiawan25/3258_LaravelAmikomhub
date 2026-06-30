@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\EventController as EventAdminController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\Admin\TransactionController;
 
 // Route User Area
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -46,8 +47,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::resource('partners', PartnerController::class);
 
-        Route::get('transactions', function () {
-            return view('admin.transactions.index');
-        })->name('transactions.index');
+        Route::get('transactions', [TransactionController::class, 'index'])
+            ->name('transactions.index');
     });
 });
