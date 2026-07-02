@@ -59,8 +59,15 @@
         <div class="grid grid-cols-2 gap-6">
             <div>
                 <label class="block text-sm font-bold mb-2">Harga</label>
-                <input type="number" name="price" value="{{ old('price', $event->price) }}"
-                    class="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl">
+
+                <input type="number" name="price" min="0" value="{{ old('price', $event->price) }}"
+                    class="w-full px-5 py-4 rounded-2xl transition-all duration-300 @error('price') bg-red-50 border-2 border-red-500 @else bg-slate-50 border-2 border-slate-100 @enderror">
+
+                @error('price')
+                <p class="text-red-600 text-sm mt-2 font-bold flex items-center gap-1">
+                    ⚠️ {{ $message }}
+                </p>
+                @enderror
             </div>
 
             <div>
