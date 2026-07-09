@@ -23,6 +23,12 @@ Route::post('/checkout/{event}', [CheckoutController::class, 'store'])
 
 Route::get('/my-ticket', [EventController::class, 'ticket'])->name('ticket');
 
+Route::get('/checkout/payment/{order_id}', [CheckoutController::class, 'payment'])
+    ->name('checkout.payment');
+    
+Route::get('/success/{order_id}', [CheckoutController::class, 'success'])
+    ->name('checkout.success');
+
 // Route Admin Area
 Route::get('/login', function () {
     return redirect()->route('admin.login');
