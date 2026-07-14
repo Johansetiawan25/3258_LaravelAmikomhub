@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\EventController as EventAdminController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\MidtransWebhookController;
 
 // Route User Area
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -33,6 +34,9 @@ Route::get('/success/{order_id}', [CheckoutController::class, 'success'])
 Route::get('/login', function () {
     return redirect()->route('admin.login');
 })->name('login');
+
+//Route Midtrans
+Route::post('/midtrans/callback', [MidtransWebhookController::class, 'handle']);
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
