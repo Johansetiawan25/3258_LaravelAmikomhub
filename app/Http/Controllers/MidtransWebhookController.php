@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
+use App\Mail\EventTicketMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+
 
 class MidtransWebhookController extends Controller
 {
@@ -71,6 +74,30 @@ class MidtransWebhookController extends Controller
 
     private function processSuccess(Transaction $transaction)
     {
-        // Modul 13
+        $event = $transaction->event;
+
+        if ($event && $event->stock > 0) {
+
+            $event->stock = $event->stock - 1;
+            $event->save();
+
+            try {
+
+                Mail::to($transaction->customer_email)
+                    ->send(new EventTicketMail($transaction));
+            } catch (\Exception $e) {
+
+                \Log::error(
+                    'Gagal mengirim email E-Ticket: ' .
+                        $e->getMessage()
+                );
+            }
+        } else {
+
+            \Log::warning(
+                'Stock habis setelah pembayaran berhasil. Order: ' .
+                    $transaction->order_id
+            );
+        }
     }
 }

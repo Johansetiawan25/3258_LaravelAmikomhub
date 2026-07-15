@@ -46,8 +46,6 @@ class CheckoutController extends Controller
             'status'          => 'Pending',
         ]);
 
-        // 5. Kurangi stok tiket
-        $event->decrement('stock');
 
         // ======================
         // INTEGRASI MIDTRANS
@@ -92,32 +90,73 @@ class CheckoutController extends Controller
         $transaction = Transaction::with('event')->where('order_id', $order_id)->firstOrFail();
         return view('checkout.payment', compact('transaction', 'categories'));
     }
+
     public function success(string $order_id)
     {
-        // Mengambil daftar kategori untuk keperluan menu footer
         $categories = \App\Models\Category::all();
 
-        $transaction = Transaction::where('order_id', $order_id)->firstOrFail();
+        $transaction = Transaction::with('event')
+            ->where('order_id', $order_id)
+            ->firstOrFail();
 
-        // Validasi status pembayaran asli dari Midtrans
         \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
         \Midtrans\Config::$isProduction = false;
+        \Midtrans\Config::$isSanitized = true;
+        \Midtrans\Config::$is3ds = true;
 
         try {
 
-            $midtransStatus = \Midtrans\Transaction::status($order_id);
+            $status = \Midtrans\Transaction::status($order_id);
 
-            if (in_array($midtransStatus->transaction_status, ['capture', 'settlement'])) {
-                $transaction->update([
-                    'status' => 'success'
-                ]);
+            $trx_status = is_array($status)
+                ? ($status['transaction_status'] ?? '')
+                : ($status->transaction_status ?? '');
+
+            if (in_array($trx_status, ['settlement', 'capture'])) {
+
+                if (strtolower($transaction->status) === 'pending') {
+
+                    $transaction->update([
+                        'status' => 'success'
+                    ]);
+
+                    if ($transaction->event && $transaction->event->stock > 0) {
+
+                        $transaction->event->stock =
+                            $transaction->event->stock - 1;
+
+                        $transaction->event->save();
+
+                        try {
+
+                            \Illuminate\Support\Facades\Mail::to(
+                                $transaction->customer_email
+                            )->send(
+                                new \App\Mail\EventTicketMail($transaction)
+                            );
+                        } catch (\Exception $e) {
+
+                            \Log::error(
+                                'Gagal mengirim email E-Ticket secara manual: ' .
+                                    $e->getMessage()
+                            );
+                        }
+                    }
+                }
             }
         } catch (\Exception $e) {
 
-            return redirect()->route('home')
-                ->with('error', 'Transaksi tidak ditemukan atau gagal diproses oleh sistem pembayaran.');
+            return redirect()
+                ->route('home')
+                ->with(
+                    'error',
+                    'Transaksi tidak ditemukan atau gagal diproses oleh sistem pembayaran.'
+                );
         }
 
-        return view('checkout.success', compact('transaction', 'categories'));
+        return view(
+            'checkout.success',
+            compact('transaction', 'categories')
+        );
     }
 }
