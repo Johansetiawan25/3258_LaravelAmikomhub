@@ -13,29 +13,60 @@ use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\MidtransWebhookController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\PengurusController;
+use App\Http\Controllers\GoogleController;
+use Illuminate\Support\Facades\Auth;
+
 
 // Route User Area
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 
+Route::get('/auth/google', [GoogleController::class, 'redirect'])
+    ->name('google.login');
+
+Route::get('/auth/google/callback', [GoogleController::class, 'callback'])
+    ->name('google.callback');
+
 //Checkout
-Route::get('/checkout/{event}', [CheckoutController::class, 'create'])
-    ->name('checkout.create');
-Route::post('/checkout/{event}', [CheckoutController::class, 'store'])
-    ->name('checkout.store');
+Route::middleware('auth')->group(function () {
 
-Route::get('/my-ticket', [EventController::class, 'ticket'])->name('ticket');
+    // Checkout
+    Route::get('/checkout/{event}', [CheckoutController::class, 'create'])
+        ->name('checkout.create');
 
-Route::get('/checkout/payment/{order_id}', [CheckoutController::class, 'payment'])
-    ->name('checkout.payment');
+    Route::post('/checkout/{event}', [CheckoutController::class, 'store'])
+        ->name('checkout.store');
 
-Route::get('/success/{order_id}', [CheckoutController::class, 'success'])
-    ->name('checkout.success');
+    // Tiket Saya
+    Route::get('/my-ticket', [EventController::class, 'ticket'])
+        ->name('ticket');
+
+    // Pembayaran
+    Route::get('/checkout/payment/{order_id}', [CheckoutController::class, 'payment'])
+        ->name('checkout.payment');
+
+    // Halaman sukses
+    Route::get('/success/{order_id}', [CheckoutController::class, 'success'])
+        ->name('checkout.success');
+});
 
 // Route Admin Area
 Route::get('/login', function () {
     return redirect()->route('admin.login');
 })->name('login');
+
+// Route User Area
+Route::get('/login', function () {
+    return view('user.login');
+})->name('login');
+
+Route::post('/logout', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+
+    return redirect()->route('home');
+})->name('logout');
 
 //Route Midtrans
 Route::post('/midtrans/callback', [MidtransWebhookController::class, 'handle']);

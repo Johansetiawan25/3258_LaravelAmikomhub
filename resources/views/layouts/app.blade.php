@@ -24,24 +24,153 @@
 
     <!-- Navigation -->
     <nav
-        class="glass sticky top-8 z-40 mx-4 mt-4 px-6 py-4 rounded-2xl border border-white/20 shadow-lg flex justify-between items-center">
-        <div class="flex items-center gap-2">
-            <div
-                class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">
-                AH</div>
-            <span class="text-xl font-bold tracking-tight">AmikomEventHub</span>
+        class="glass sticky top-8 z-40 mx-4 mt-4 px-6 py-4 rounded-2xl border border-white/20 shadow-lg flex items-center">
+
+        <!-- Logo -->
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">
+                AH
+            </div>
+
+            <span class="text-xl font-bold tracking-tight">
+                AmikomEventHub
+            </span>
         </div>
 
-        <div class="hidden md:flex gap-8 font-medium">
-            <a href="#" class="text-indigo-600">Jelajahi</a>
-            <a href="#" class="hover:text-indigo-600 transition">Kategori</a>
-            <a href="#" class="hover:text-indigo-600 transition">Tentang Kami</a>
+        <!-- Menu -->
+        <div class="flex-1 flex justify-center">
+            <div class="hidden md:flex items-center gap-10 font-medium">
+
+                <a href="{{ route('home') }}"
+                    class="text-indigo-600 hover:text-indigo-700 transition">
+                    Jelajahi
+                </a>
+
+                <a href="#kategori"
+                    class="hover:text-indigo-600 transition">
+                    Kategori
+                </a>
+
+                <a href="#footer"
+                    class="hover:text-indigo-600 transition">
+                    Tentang Kami
+                </a>
+
+            </div>
         </div>
-        <!-- <div class="flex gap-3">
-            <button class="px-5 py-2.5 rounded-xl font-semibold hover:bg-slate-200 transition">Login</button>
-            <button
-                class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-semibold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition">Daftar</button>
-        </div> -->
+
+        <!-- Login / User -->
+        <div class="flex items-center gap-3">
+
+            @guest
+
+            <a href="{{ route('login') }}"
+                class="px-5 py-2.5 rounded-xl border border-slate-300 font-semibold hover:bg-slate-100 transition">
+
+                Masuk
+
+            </a>
+
+            <a href="{{ route('login') }}"
+                class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-semibold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition">
+
+                Daftar
+
+            </a>
+
+            @else
+
+            <div class="relative group">
+
+                <!-- Button -->
+                <button
+                    class="flex items-center gap-3 px-3 py-2 rounded-xl border border-slate-300 hover:bg-slate-100 transition">
+
+                    <div
+                        class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold">
+
+                        {{ strtoupper(substr(Auth::user()->name,0,1)) }}
+
+                    </div>
+
+                    <div class="hidden lg:block text-left">
+
+                        <p class="font-bold text-sm leading-none">
+                            {{ Auth::user()->name }}
+                        </p>
+
+                        <p class="text-xs text-slate-500 mt-1">
+                            {{ Auth::user()->email }}
+                        </p>
+
+                    </div>
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 text-slate-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24">
+
+                        <path stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M19 9l-7 7-7-7" />
+
+                    </svg>
+
+                </button>
+
+                <!-- Dropdown -->
+                <div
+                    class="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-200">
+
+                    <!-- Header -->
+                    <div class="px-5 py-4 border-b">
+
+                        <p class="font-bold text-slate-800">
+                            {{ Auth::user()->name }}
+                        </p>
+
+                        <p class="text-xs text-slate-500">
+                            {{ Auth::user()->email }}
+                        </p>
+
+                    </div>
+
+                    <!-- Menu -->
+
+                    <a href="{{ route('ticket') }}"
+                        class="flex items-center gap-3 px-5 py-3 hover:bg-slate-100 transition">
+
+                        🎫
+                        <span>Tiket Saya</span>
+
+                    </a>
+
+                    <hr>
+
+                    <form action="{{ route('logout') }}" method="POST">
+
+                        @csrf
+
+                        <button
+                            class="w-full flex items-center gap-3 px-5 py-3 text-red-600 hover:bg-red-50 transition">
+
+                            🚪
+                            <span>Logout</span>
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            @endguest
+
+        </div>
+
     </nav>
 
     @yield('content')
