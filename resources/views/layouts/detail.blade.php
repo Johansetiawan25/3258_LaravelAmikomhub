@@ -35,7 +35,7 @@
 
     <!-- FOOTER -->
     <footer class="bg-slate-900 text-slate-400 py-12 mt-20 text-center">
-        © 2024 AmikomEventHub
+        © 2026 AmikomEventHub
     </footer>
 
 </body>

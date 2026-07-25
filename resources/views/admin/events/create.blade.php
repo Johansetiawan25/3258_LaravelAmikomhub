@@ -46,7 +46,19 @@
         <div class="grid grid-cols-2 gap-6">
             <div>
                 <label class="block text-sm font-bold mb-2">Harga</label>
-                <input type="number" name="price" value="{{ old('price',0) }}" class="px-5 py-4 bg-slate-50 rounded-2xl">
+
+                <input
+                    type="number"
+                    name="price"
+                    min="0"
+                    value="{{ old('price', 0) }}"
+                    class="w-full px-5 py-4 rounded-2xl transition-all duration-300 @error('price') bg-red-50 border-2 border-red-500 @else bg-slate-50 border-2 border-slate-100 @enderror">
+
+                @error('price')
+                <p class="text-red-600 text-sm mt-2 font-bold flex items-center gap-1">
+                    ⚠️ {{ $message }}
+                </p>
+                @enderror
             </div>
             <div>
                 <label class="block text-sm font-bold mb-2">Stok</label>
@@ -54,7 +66,40 @@
             </div>
         </div>
 
-        
+        <div>
+            <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">
+                Poster Event (Opsional)
+            </label>
+
+            <input
+                type="file"
+                name="poster"
+                accept="image/*"
+                class="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl 
+               focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 
+               outline-none transition font-medium">
+
+            {{-- Preview / Link poster lama --}}
+            @if(!empty($event->poster_path))
+            <p class="text-sm text-slate-500 mt-2">
+                Poster saat ini:
+                <a href="{{ asset('storage/' . $event->poster_path) }}"
+                    target="_blank"
+                    class="text-indigo-600 hover:underline">
+                    Lihat
+                </a>
+            </p>
+            @endif
+
+            {{-- Error --}}
+            @error('poster')
+            <span class="text-red-500 text-sm mt-1 block">
+                {{ $message }}
+            </span>
+            @enderror
+        </div>
+
+
         <!-- Tombol -->
         <div class="flex justify-between items-center pt-4">
             <a href="{{ route('admin.events.index') }}"

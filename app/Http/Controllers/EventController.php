@@ -3,13 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Event;
+use App\Models\Category;
 
 class EventController extends Controller
 {
-    public function show()
+    public function show(Event $event)
     {
-        return view('event-detail');
+        // Mengambil daftar kategori untuk keperluan menu footer
+        $categories = Category::all();
+
+        // Me-render view dengan membawa data kategori dan data spesifik acara tersebut
+        return view('event-detail', compact('categories', 'event'));
     }
+
 
     public function checkout()
     {

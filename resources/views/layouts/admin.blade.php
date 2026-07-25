@@ -8,6 +8,7 @@
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -99,24 +100,101 @@
 
                 Partner
             </a>
+
+            <!-- Menu Pengurus -->
+            <div x-data="{ open: {{ request()->routeIs('admin.pengurus.*') || request()->routeIs('admin.jabatan.*') ? 'true' : 'false' }} }">
+
+                <button
+                    @click="open = !open"
+                    class="w-full flex items-center justify-between px-4 py-3 rounded-xl font-bold transition
+        {{ request()->routeIs('admin.pengurus.*') || request()->routeIs('admin.jabatan.*')
+            ? 'bg-indigo-800 text-white'
+            : 'hover:bg-indigo-800' }}">
+
+                    <div class="flex items-center gap-3">
+
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="w-5 h-5 {{ request()->routeIs('admin.pengurus.*') || request()->routeIs('admin.jabatan.*') ? 'text-indigo-300' : 'text-indigo-400' }}"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24">
+
+                            <path stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M17 20h5V4H2v16h5m10 0v-2a3 3 0 00-3-3H10a3 3 0 00-3 3v2m10 0H7m8-10a3 3 0 11-6 0 3 3 0 016 0z" />
+
+                        </svg>
+
+                        <span>Pengurus</span>
+
+                    </div>
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 transition-transform duration-300"
+                        :class="{ 'rotate-180': open }"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24">
+
+                        <path stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M19 9l-7 7-7-7" />
+
+                    </svg>
+
+                </button>
+
+                <div
+                    x-show="open"
+                    x-transition
+                    class="ml-8 mt-2 space-y-2">
+
+                    <!-- Data Pengurus -->
+                    <a href="{{ route('admin.pengurus.index') }}"
+                        class="block px-4 py-2 rounded-lg text-sm font-medium transition
+            {{ request()->routeIs('admin.pengurus.*')
+                ? 'bg-indigo-700 text-white'
+                : 'text-indigo-300 hover:bg-indigo-800 hover:text-white' }}">
+
+                        Data Pengurus
+
+                    </a>
+
+                    <!-- Data Jabatan -->
+                    <a href="{{ route('admin.jabatan.index') }}"
+                        class="block px-4 py-2 rounded-lg text-sm font-medium transition
+            {{ request()->routeIs('admin.jabatan.*')
+                ? 'bg-indigo-700 text-white'
+                : 'text-indigo-300 hover:bg-indigo-800 hover:text-white' }}">
+
+                        Data Jabatan
+
+                    </a>
+
+                </div>
+
+            </div>
+            
         </nav>
 
         <!-- Logout -->
-        <div class="pt-6 border-t border-indigo-800">
-            <form action="#" method="POST">
-                @csrf
-                <button type="submit"
-                    class="w-full flex items-center gap-3 px-4 py-3 text-indigo-300 hover:text-white transition font-medium text-left">
+        <form action="{{ route('admin.logout') }}" method="POST">
+            @csrf
 
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                    </svg>
+            <button type="submit"
+                class="w-full flex items-center gap-3 px-4 py-3 text-indigo-300 hover:text-white transition font-medium text-left">
 
-                    Keluar
-                </button>
-            </form>
-        </div>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+
+                Keluar
+            </button>
+
+        </form>
     </aside>
 
     <!-- Main -->
@@ -152,6 +230,8 @@
         @yield('content')
 
     </main>
+
+    @stack('scripts')
 
 </body>
 

@@ -31,7 +31,7 @@
                 AH</div>
             <span class="text-xl font-bold tracking-tight">AmikomEventHub</span>
         </div>
-        
+
         <div class="hidden md:flex gap-8 font-medium">
             <a href="#" class="text-indigo-600">Jelajahi</a>
             <a href="#" class="hover:text-indigo-600 transition">Kategori</a>
@@ -76,9 +76,11 @@
             </div>
         </div>
         <div class="max-w-7xl mx-auto pt-12 mt-12 border-t border-indigo-800 text-center text-indigo-400 text-sm">
-            &copy; 2024 AmikomEventHub. Built with Laravel & Tailwind CSS.
+            &copy; 2026 AmikomEventHub. Built with Laravel & Tailwind CSS.
         </div>
     </footer>
+
+    @yield('scripts')
 
 </body>
 
