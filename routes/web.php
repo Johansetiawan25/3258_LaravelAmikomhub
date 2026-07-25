@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\MidtransWebhookController;
+use App\Http\Controllers\JabatanController;
+use App\Http\Controllers\PengurusController;
 
 // Route User Area
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -26,7 +28,7 @@ Route::get('/my-ticket', [EventController::class, 'ticket'])->name('ticket');
 
 Route::get('/checkout/payment/{order_id}', [CheckoutController::class, 'payment'])
     ->name('checkout.payment');
-    
+
 Route::get('/success/{order_id}', [CheckoutController::class, 'success'])
     ->name('checkout.success');
 
@@ -56,6 +58,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('categories', CategoryController::class);
 
         Route::resource('partners', PartnerController::class);
+
+        // pengurus
+        Route::resource('jabatan', JabatanController::class);
+
+        Route::resource('pengurus', PengurusController::class);
 
         Route::get('transactions', [TransactionController::class, 'index'])
             ->name('transactions.index');
