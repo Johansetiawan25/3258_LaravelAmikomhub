@@ -21,7 +21,13 @@ class EventController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.events.create', compact('categories'));
+
+        $organizers = \App\Models\Organizer::all();
+
+        return view('admin.events.create', compact(
+            'categories',
+            'organizers'
+        ));
     }
 
     // 🔹 STORE (simpan data)
@@ -70,17 +76,25 @@ class EventController extends Controller
             ->route('admin.events.index')
             ->with('success', 'Data event berhasil dihapus secara permanen.');
     }
-    
+
     public function edit(Event $event)
     {
         $categories = Category::all();
-        return view('admin.events.edit', compact('event', 'categories'));
+
+        $organizers = \App\Models\Organizer::all();
+
+        return view('admin.events.edit', compact(
+            'event',
+            'categories',
+            'organizers'
+        ));
     }
 
     // 🔹 Proses update data
     public function update(Request $request, Event $event)
     {
         $data = $request->validate([
+            'organizer_id' => 'required|exists:organizers,id',
             'category_id' => 'required|exists:categories,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',

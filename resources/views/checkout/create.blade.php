@@ -87,7 +87,7 @@
         <div class="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
 
             <h3 class="text-xl font-bold mb-6 italic text-indigo-600 underline underline-offset-8">
-                📦 Data Pemesan (Tanpa Login)
+                Data Pemesan
             </h3>
 
             <form action="{{ route('checkout.store', $event->id) }}"

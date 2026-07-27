@@ -11,20 +11,131 @@
                   : 'https://placehold.co/200x600' }}"
                 alt="{{ $event->title }}"
                 class="w-full rounded-[2.5rem] shadow-2xl border-8 border-white object-cover aspect-[3/4]">
-            <div class="mt-8 p-6 bg-white rounded-3xl border border-slate-100 shadow-sm">
-                <h4 class="font-bold mb-4">Penyelenggara</h4>
-                <div class="flex items-center gap-4">
+            <div class="mt-8 bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+
+                <h4 class="font-bold text-lg mb-5">
+                    Penyelenggara
+                </h4>
+
+
+                @if($event->organizer)
+
+                <a href="{{ route('organizer.show', $event->organizer) }}"
+                    class="flex items-center gap-4 hover:bg-slate-50 rounded-2xl p-3 transition">
+
+
+                    {{-- Logo --}}
+                    @if($event->organizer->logo)
+
+                    <img
+                        src="{{ asset('storage/'.$event->organizer->logo) }}"
+                        class="w-16 h-16 rounded-2xl object-cover border">
+
+                    @else
+
                     <div
-                        class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold">
-                        AB</div>
-                    <div>
-                        <p class="font-bold text-slate-800">ABP Productions</p>
-                        <p class="text-xs text-slate-500">Verified Organizer</p>
+                        class="w-16 h-16 rounded-2xl bg-indigo-100 flex items-center justify-center text-indigo-700 text-xl font-bold">
+
+                        {{ strtoupper(substr($event->organizer->name,0,2)) }}
+
                     </div>
+
+                    @endif
+
+
+
+                    <div class="flex-1">
+
+                        <h3 class="font-bold text-lg text-slate-800">
+                            {{ $event->organizer->name }}
+                        </h3>
+
+
+                        <div class="flex items-center gap-2 mt-1">
+
+                            <span class="text-yellow-500 font-bold">
+
+                                ⭐ {{ number_format($event->organizer->reviews->avg('rating') ?? 0,1) }}
+
+                            </span>
+
+
+                            <span class="text-slate-500 text-sm">
+
+                                ({{ $event->organizer->reviews->count() }} Review)
+
+                            </span>
+
+                        </div>
+
+
+                        <p class="text-xs text-emerald-600 font-semibold mt-1">
+
+                            ✔ Verified Organizer
+
+                        </p>
+
+                    </div>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="w-5 h-5 text-slate-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor">
+
+                        <path stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M9 5l7 7-7 7" />
+
+                    </svg>
+
+
+                </a>
+
+
+                @else
+
+
+                {{-- Jika belum ada organizer --}}
+
+                <div class="flex items-center gap-4 rounded-2xl p-3 bg-slate-50">
+
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-slate-200 flex items-center justify-center text-slate-500 text-xl font-bold">
+
+                        ?
+
+                    </div>
+
+
+                    <div>
+
+                        <h3 class="font-bold text-lg text-slate-700">
+                            Organizer belum tersedia
+                        </h3>
+
+
+                        <p class="text-sm text-slate-500 mt-1">
+                            Informasi penyelenggara event ini belum ditambahkan.
+                        </p>
+
+                    </div>
+
+
                 </div>
+
+
+                @endif
+
+
             </div>
         </div>
     </div>
+
+
 
     <!-- Right: Details -->
     <div class="lg:col-span-2 space-y-12">
@@ -124,5 +235,173 @@
         </div>
     </div>
 </main>
+
+<!-- ========================= -->
+<!-- Ulasan & Penilaian -->
+<!-- ========================= -->
+
+<section class="max-w-7xl mx-auto px-6 mt-20">
+
+    <div class="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8">
+
+        <div class="flex justify-between items-center mb-8">
+
+            <h2 class="text-2xl font-black">
+                Ulasan & Penilaian
+            </h2>
+
+            @guest
+            <a href="{{ route('login') }}"
+                class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-xl font-bold">
+                Login untuk Review
+            </a>
+            @endguest
+
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+
+            {{-- Rating Besar --}}
+            <div class="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-3xl text-white p-8 text-center">
+
+                <h1 class="text-6xl font-black">
+
+                    {{ number_format($averageRating,1) }}
+
+                </h1>
+
+                <div class="text-yellow-300 text-xl mt-3">
+
+                    ⭐⭐⭐⭐⭐
+
+                </div>
+
+                <p class="mt-4">
+
+                    {{ $totalReviews }} Ulasan
+
+                </p>
+
+            </div>
+
+
+            {{-- Progress Bar --}}
+            <div class="lg:col-span-2 space-y-5">
+
+                @foreach([5,4,3,2,1] as $star)
+
+                @php
+                $count = ${'rating'.$star};
+                $percent = $totalReviews ? ($count/$totalReviews)*100 : 0;
+                @endphp
+
+                <div class="flex items-center gap-4">
+
+                    <span class="font-bold w-8">
+
+                        {{ $star }}★
+
+                    </span>
+
+                    <div class="flex-1 h-3 rounded-full bg-slate-200">
+
+                        <div
+                            class="h-3 rounded-full bg-indigo-600"
+                            style="width: {{ $percent }}%">
+
+                        </div>
+
+                    </div>
+
+                    <span class="text-slate-500 w-6 text-right">
+
+                        {{ $count }}
+
+                    </span>
+
+                </div>
+
+                @endforeach
+
+            </div>
+
+        </div>
+
+        <hr class="my-10">
+
+        @forelse($event->reviews as $review)
+
+        <div class="bg-slate-50 rounded-2xl p-6 mb-5">
+
+            <div class="flex justify-between">
+
+                <div>
+
+                    <h3 class="font-bold">
+
+                        {{ $review->user->name }}
+
+                    </h3>
+
+                    <small class="text-slate-400">
+
+                        {{ $review->created_at->format('d M Y') }}
+
+                    </small>
+
+                </div>
+
+                <span class="text-yellow-500 font-bold">
+
+                    ⭐ {{ $review->rating }}/5
+
+                </span>
+
+            </div>
+
+            <p class="mt-4 text-slate-600">
+
+                {{ $review->review }}
+
+            </p>
+
+        </div>
+
+        @empty
+
+        <div class="bg-slate-50 rounded-3xl p-16 text-center">
+
+            <svg class="w-16 h-16 mx-auto text-slate-300 mb-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24">
+
+                <path stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 10h.01M12 10h.01M16 10h.01M9 16h6M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4-.8L3 20l1.1-3.3A7.944 7.944 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+
+            </svg>
+
+            <h3 class="text-xl font-bold text-slate-700">
+
+                Belum ada ulasan
+
+            </h3>
+
+            <p class="text-slate-500 mt-2">
+
+                Jadilah yang pertama memberikan ulasan untuk acara ini.
+
+            </p>
+
+        </div>
+
+        @endforelse
+
+    </div>
+
+</section>
+
 
 @endsection

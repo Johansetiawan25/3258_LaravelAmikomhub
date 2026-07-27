@@ -15,11 +15,17 @@ use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\PengurusController;
 use App\Http\Controllers\GoogleController;
 use Illuminate\Support\Facades\Auth;
-
+use App\Http\Controllers\OrganizerController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\Admin\OrganizerController as OrganizerAdminController;
+use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 
 // Route User Area
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
+
+Route::get('/organizer/{organizer}', [OrganizerController::class, 'show'])
+    ->name('organizer.show');
 
 Route::get('/auth/google', [GoogleController::class, 'redirect'])
     ->name('google.login');
@@ -40,6 +46,8 @@ Route::middleware('auth')->group(function () {
     // Tiket Saya
     Route::get('/my-ticket', [EventController::class, 'ticket'])
         ->name('ticket');
+    Route::get('/my-ticket/{transaction}', [EventController::class, 'ticketDetail'])
+        ->name('ticket.detail');
 
     // Pembayaran
     Route::get('/checkout/payment/{order_id}', [CheckoutController::class, 'payment'])
@@ -48,6 +56,9 @@ Route::middleware('auth')->group(function () {
     // Halaman sukses
     Route::get('/success/{order_id}', [CheckoutController::class, 'success'])
         ->name('checkout.success');
+
+    Route::post('/organizers/{organizer}/review', [ReviewController::class, 'store'])
+        ->name('reviews.store');
 });
 
 // Route Admin Area
@@ -89,6 +100,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('categories', CategoryController::class);
 
         Route::resource('partners', PartnerController::class);
+
+        Route::resource('organizers', OrganizerAdminController::class);
+
+        Route::resource('reviews', AdminReviewController::class)
+            ->only([
+                'index',
+                'show',
+                'destroy'
+            ]);
 
         // pengurus
         Route::resource('jabatan', JabatanController::class);

@@ -101,6 +101,50 @@
                 Partner
             </a>
 
+            <!-- Organizer -->
+            <!-- Organizer -->
+            <a href="{{ route('admin.organizers.index') }}"
+                class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('admin.organizers.*') ? 'bg-indigo-800 text-white' : 'hover:bg-indigo-800' }} rounded-xl font-bold transition">
+
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="w-5 h-5 {{ request()->routeIs('admin.organizers.*') ? 'text-indigo-300' : 'text-indigo-400' }}"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor">
+
+                    <!-- Office Building -->
+                    <path stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M3 21h18M5 21V7a2 2 0 012-2h10a2 2 0 012 2v14M9 9h2m-2 4h2m4-4h2m-2 4h2M9 17h6" />
+
+                </svg>
+
+                <span>Organizer</span>
+
+            </a>
+
+            <!-- Review -->
+            <a href="{{ route('admin.reviews.index') }}"
+                class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('admin.reviews.*') ? 'bg-indigo-800 text-white' : 'hover:bg-indigo-800' }} rounded-xl font-bold transition">
+
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="w-5 h-5 {{ request()->routeIs('admin.reviews.*') ? 'text-indigo-300' : 'text-indigo-400' }}"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor">
+
+                    <path stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.104 3.397a1 1 0 00.95.69h3.572c.969 0 1.371 1.24.588 1.81l-2.89 2.1a1 1 0 00-.364 1.118l1.104 3.397c.3.921-.755 1.688-1.54 1.118l-2.89-2.1a1 1 0 00-1.176 0l-2.89 2.1c-.784.57-1.838-.197-1.539-1.118l1.103-3.397a1 1 0 00-.363-1.118l-2.89-2.1c-.784-.57-.38-1.81.587-1.81h3.573a1 1 0 00.95-.69l1.104-3.397z" />
+
+                </svg>
+
+                <span>Review</span>
+
+            </a>
+
             <!-- Menu Pengurus -->
             <div x-data="{ open: {{ request()->routeIs('admin.pengurus.*') || request()->routeIs('admin.jabatan.*') ? 'true' : 'false' }} }">
 
@@ -176,7 +220,7 @@
                 </div>
 
             </div>
-            
+
         </nav>
 
         <!-- Logout -->

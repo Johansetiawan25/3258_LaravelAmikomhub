@@ -39,11 +39,11 @@
 
             @if(strtolower($transaction->status) == 'pending')
 
-                sedang diproses.
+            sedang diproses.
 
             @else
 
-                telah berhasil.
+            telah berhasil.
 
             @endif
 
@@ -67,38 +67,51 @@
         <div class="mt-8">
 
             @php
-                $status = strtolower($transaction->status);
+            $status = strtolower($transaction->status);
             @endphp
 
             @if($status == 'success' || $status == 'settlement')
 
-                <span class="inline-flex px-5 py-2 rounded-full bg-green-100 text-green-700 font-bold">
-                    SUCCESS
-                </span>
+            <span class="inline-flex px-5 py-2 rounded-full bg-green-100 text-green-700 font-bold">
+                SUCCESS
+            </span>
 
             @elseif($status == 'pending')
 
-                <span class="inline-flex px-5 py-2 rounded-full bg-yellow-100 text-yellow-700 font-bold">
-                    PENDING
-                </span>
+            <span class="inline-flex px-5 py-2 rounded-full bg-yellow-100 text-yellow-700 font-bold">
+                PENDING
+            </span>
 
             @else
 
-                <span class="inline-flex px-5 py-2 rounded-full bg-red-100 text-red-700 font-bold">
-                    {{ strtoupper($transaction->status) }}
-                </span>
+            <span class="inline-flex px-5 py-2 rounded-full bg-red-100 text-red-700 font-bold">
+                {{ strtoupper($transaction->status) }}
+            </span>
 
             @endif
 
         </div>
 
         <!-- Button -->
-        <a href="{{ route('home') }}"
-            class="inline-flex justify-center items-center w-full mt-10 bg-indigo-600 hover:bg-indigo-700 transition-all duration-300 text-white font-bold py-4 rounded-2xl shadow-lg">
 
-            Kembali ke Beranda
+        <div class="mt-8 space-y-4">
 
-        </a>
+            <a href="{{ route('ticket') }}"
+                class="block w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold text-center hover:bg-indigo-700 transition">
+
+                Lihat Tiket Saya
+
+            </a>
+
+
+            <a href="{{ route('home') }}"
+                class="block w-full py-4 bg-slate-100 hover:bg-slate-200 transition text-slate-700 font-bold rounded-2xl text-center">
+
+                Kembali ke Beranda
+
+            </a>
+
+        </div>
 
     </div>
 
