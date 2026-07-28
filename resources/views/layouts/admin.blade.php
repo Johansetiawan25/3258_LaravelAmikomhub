@@ -251,16 +251,34 @@
                 <p class="text-slate-500 font-medium">@yield('page_subtitle', 'Selamat datang kembali, Admin!')</p>
             </div>
 
+            @if(Auth::guard('admin')->check())
+
             <div class="flex items-center gap-4">
+
                 <div class="text-right hidden md:block">
-                    <p class="font-bold">Admin - Johan Setiawan</p>
-                    <p class="text-xs text-slate-400">Penyelenggara Utama</p>
+
+                    <p class="font-bold">
+                        {{ Auth::guard('admin')->user()->name }}
+                    </p>
+
+                    <p class="text-xs text-slate-400">
+                        Administrator
+                    </p>
+
                 </div>
 
                 <div class="w-12 h-12 bg-white rounded-2xl shadow-sm border flex items-center justify-center p-1">
-                    <img src="https://ui-avatars.com/api/?name=admin&background=6366f1&color=fff" class="rounded-xl">
+
+                    <img
+                        src="https://ui-avatars.com/api/?name={{ urlencode(Auth::guard('admin')->user()->name) }}&background=6366f1&color=fff"
+                        class="rounded-xl">
+
                 </div>
+
             </div>
+
+            @endif
+            
         </header>
 
         <!-- Alert -->

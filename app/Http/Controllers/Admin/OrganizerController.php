@@ -86,6 +86,31 @@ class OrganizerController extends Controller
             ->with('success', 'Organizer berhasil diperbarui.');
     }
 
+    public function approve(Organizer $organizer)
+    {
+        $organizer->update([
+            'status' => 'approved'
+        ]);
+
+        return redirect()
+            ->route('admin.organizers.index')
+            ->with('success', 'Organizer berhasil disetujui.');
+    }
+    public function reject(Organizer $organizer)
+    {
+        $organizer->update([
+            'status' => 'rejected'
+        ]);
+
+
+        return redirect()
+            ->route('admin.organizers.index')
+            ->with(
+                'success',
+                'Organizer ditolak.'
+            );
+    }
+
     public function destroy(Organizer $organizer)
     {
         if ($organizer->logo && Storage::disk('public')->exists($organizer->logo)) {

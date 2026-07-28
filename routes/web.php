@@ -19,10 +19,64 @@ use App\Http\Controllers\OrganizerController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Admin\OrganizerController as OrganizerAdminController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
+use App\Http\Controllers\Organizer\AuthController as OrganizerAuthController;
+use App\Http\Controllers\Organizer\DashboardController as OrganizerDashboardController;
+use App\Http\Controllers\Organizer\EventController as OrganizerEventController;
+use App\Http\Controllers\UserAuthController;
+
 
 // Route User Area
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
+
+Route::prefix('organizer')
+    ->name('organizer.')
+    ->group(function () {
+
+        // Register
+        Route::get('/register', [OrganizerAuthController::class, 'showRegister'])
+            ->name('register');
+
+        Route::post('/register', [OrganizerAuthController::class, 'register']);
+
+        // Login
+        Route::get('/login', [OrganizerAuthController::class, 'showLogin'])
+            ->name('login');
+
+        Route::post('/login', [OrganizerAuthController::class, 'login']);
+
+        // Logout
+        Route::post('/logout', [OrganizerAuthController::class, 'logout'])
+            ->name('logout');
+
+        // Organizer Area
+        Route::middleware('organizer')->group(function () {
+
+            // Dashboard
+            Route::get('/dashboard', [OrganizerDashboardController::class, 'index'])
+                ->name('dashboard');
+
+            // CRUD Event Organizer
+            Route::resource('events', OrganizerEventController::class);
+
+            // Pendapatan
+            Route::get(
+                '/income',
+                [OrganizerDashboardController::class, 'income']
+            )->name('income');
+
+            // Profile
+            Route::get(
+                '/profile',
+                [OrganizerDashboardController::class, 'profile']
+            )->name('profile');
+
+            Route::put(
+                '/profile',
+                [OrganizerDashboardController::class, 'updateProfile']
+            )->name('profile.update');
+        });
+    });
 
 Route::get('/organizer/{organizer}', [OrganizerController::class, 'show'])
     ->name('organizer.show');
@@ -61,36 +115,37 @@ Route::middleware('auth')->group(function () {
         ->name('reviews.store');
 });
 
-// Route Admin Area
-Route::get('/login', function () {
-    return redirect()->route('admin.login');
-})->name('login');
+// ======================
+// User Authentication
+// ======================
 
-// Route User Area
-Route::get('/login', function () {
-    return view('user.login');
-})->name('login');
+Route::get('/login', [UserAuthController::class, 'showLogin'])
+    ->name('login');
 
-Route::post('/logout', function () {
-    Auth::logout();
-    request()->session()->invalidate();
-    request()->session()->regenerateToken();
+Route::post('/login', [UserAuthController::class, 'login']);
 
-    return redirect()->route('home');
-})->name('logout');
+Route::get('/register', [UserAuthController::class, 'showRegister'])
+    ->name('register');
+
+Route::post('/register', [UserAuthController::class, 'register']);
+
+Route::post('/logout', [UserAuthController::class, 'logout'])
+    ->name('logout');
 
 //Route Midtrans
 Route::post('/midtrans/callback', [MidtransWebhookController::class, 'handle']);
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
+    // Jika buka /admin langsung diarahkan ke login admin
+    Route::redirect('/', '/admin/login');
     // Login
     Route::get('login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('login', [AuthController::class, 'login'])->name('login.post');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
     // Route yang dilindungi
-    Route::middleware(['auth', 'admin'])->group(function () {
+    Route::middleware(['admin'])->group(function () {
 
         Route::get('/', [DashboardController::class, 'index'])
             ->name('dashboard');
@@ -109,6 +164,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 'show',
                 'destroy'
             ]);
+
+        Route::post(
+            'organizers/{organizer}/approve',
+            [OrganizerAdminController::class, 'approve']
+        )
+            ->name('organizers.approve');
+
+
+        Route::post(
+            'organizers/{organizer}/reject',
+            [OrganizerAdminController::class, 'reject']
+        )
+            ->name('organizers.reject');
 
         // pengurus
         Route::resource('jabatan', JabatanController::class);

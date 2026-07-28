@@ -35,6 +35,7 @@ class EventController extends Controller
     {
         // Menerapkan validasi data request dari pengguna
         $data = $request->validate([
+            'organizer_id' => 'required|exists:organizers,id',
             'category_id' => 'required|exists:categories,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -42,9 +43,8 @@ class EventController extends Controller
             'location' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|numeric|min:1',
-            'poster' => 'nullable|image|max:2048' // Maksimal 2MB
+            'poster' => 'nullable|image|max:2048'
         ]);
-
         if ($request->hasFile('poster')) {
             // Simpan ke direktori storage/app/public/posters
             $data['poster_path'] = $request->file('poster')->store('posters', 'public');

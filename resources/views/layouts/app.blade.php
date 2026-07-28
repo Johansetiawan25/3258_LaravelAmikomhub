@@ -71,7 +71,7 @@
 
             </a>
 
-            <a href="{{ route('login') }}"
+            <a href="{{ route('register') }}"
                 class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-semibold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition">
 
                 Daftar
