@@ -238,7 +238,7 @@
     ? 'bg-slate-300 text-slate-700 hover:bg-slate-400'
     : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white'
 }}">
-                        Detail
+                        Detail Event
                     </a>
                 </div>
             </div>
