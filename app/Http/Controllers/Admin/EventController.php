@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Organizer;
+use Illuminate\Validation\Rule;
 
 class EventController extends Controller
 {
@@ -22,7 +24,7 @@ class EventController extends Controller
     {
         $categories = Category::all();
 
-        $organizers = \App\Models\Organizer::all();
+        $organizers = Organizer::where('status', 'approved')->get();
 
         return view('admin.events.create', compact(
             'categories',
@@ -35,7 +37,11 @@ class EventController extends Controller
     {
         // Menerapkan validasi data request dari pengguna
         $data = $request->validate([
-            'organizer_id' => 'required|exists:organizers,id',
+            'organizer_id' => [
+                'required',
+                Rule::exists('organizers', 'id')
+                    ->where('status', 'approved'),
+            ],
             'category_id' => 'required|exists:categories,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -81,7 +87,7 @@ class EventController extends Controller
     {
         $categories = Category::all();
 
-        $organizers = \App\Models\Organizer::all();
+        $organizers = Organizer::where('status', 'approved')->get();
 
         return view('admin.events.edit', compact(
             'event',

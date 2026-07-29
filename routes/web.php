@@ -23,11 +23,13 @@ use App\Http\Controllers\Organizer\AuthController as OrganizerAuthController;
 use App\Http\Controllers\Organizer\DashboardController as OrganizerDashboardController;
 use App\Http\Controllers\Organizer\EventController as OrganizerEventController;
 use App\Http\Controllers\UserAuthController;
+use App\Http\Controllers\PageController;
 
 
 // Route User Area
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
+
 
 Route::prefix('organizer')
     ->name('organizer.')
@@ -115,6 +117,8 @@ Route::middleware('auth')->group(function () {
         ->name('reviews.store');
 });
 
+
+
 // ======================
 // User Authentication
 // ======================
@@ -187,3 +191,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->name('transactions.index');
     });
 });
+
+Route::get('/kategori', [PageController::class, 'categories'])
+    ->name('categories');
+
+Route::get('/tentang-kami', [PageController::class, 'about'])
+    ->name('about');

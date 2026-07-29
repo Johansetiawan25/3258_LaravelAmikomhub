@@ -180,20 +180,49 @@
             class="bg-indigo-600 rounded-[2.5rem] p-8 md:p-12 text-white shadow-2xl shadow-indigo-200 relative overflow-hidden">
             <div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
                 <div>
-                    <p class="text-indigo-200 font-bold uppercase tracking-widest text-sm mb-2">Harga Tiket</p>
+
+                    <p class="text-indigo-200 font-bold uppercase tracking-widest text-sm mb-2">
+                        Harga Tiket
+                    </p>
+
+                    @if($event->price == 0)
+
+                    <h2 class="text-5xl font-black text-green-300">
+                        GRATIS
+                    </h2>
+
+                    <div class="mt-4 inline-flex items-center px-4 py-2 rounded-xl bg-green-500/20 border border-green-300 text-green-100 font-semibold">
+                        🎉 Event Gratis - Tidak perlu pembayaran Midtrans
+                    </div>
+
+                    @else
+
                     <h2 class="text-5xl font-black">
                         Rp {{ number_format($event->price, 0, ',', '.') }}
-                        <span class="text-lg font-medium text-indigo-200">/ orang</span>
+                        <span class="text-lg font-medium text-indigo-200">
+                            / orang
+                        </span>
                     </h2>
+
+                    @endif
+
                     <p class="mt-4 text-indigo-100 flex items-center gap-2">
+
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            <path stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                            </path>
                         </svg>
-                        Sisa stok: <span class="font-bold underline">
+
+                        Sisa stok :
+                        <span class="font-bold underline">
                             {{ $event->stock }} Tiket lagi!
                         </span>
+
                     </p>
+
                 </div>
                 <div>
                     <a href="{{ route('checkout.create', $event->id) }}"

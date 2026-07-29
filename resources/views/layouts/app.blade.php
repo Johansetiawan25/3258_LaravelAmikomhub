@@ -17,6 +17,27 @@
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(10px);
         }
+
+        @media print {
+
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background: white !important;
+            }
+
+            .ticket-print {
+                margin: 0 auto !important;
+                padding: 0 !important;
+                max-width: 700px !important;
+            }
+
+            @page {
+                margin: 10mm;
+            }
+        }
     </style>
 </head>
 
@@ -24,7 +45,7 @@
 
     <!-- Navigation -->
     <nav
-        class="glass sticky top-8 z-40 mx-4 mt-4 px-6 py-4 rounded-2xl border border-white/20 shadow-lg flex items-center">
+        class="glass sticky top-8 z-40 mx-4 mt-4 px-6 py-4 rounded-2xl border border-white/20 shadow-lg flex items-center no-print">
 
         <!-- Logo -->
         <div class="flex items-center gap-3">
@@ -42,17 +63,17 @@
             <div class="hidden md:flex items-center gap-10 font-medium">
 
                 <a href="{{ route('home') }}"
-                    class="text-indigo-600 hover:text-indigo-700 transition">
+                    class="{{ request()->routeIs('home') ? 'text-indigo-600 font-semibold' : 'text-slate-700 hover:text-indigo-600' }} transition">
                     Jelajahi
                 </a>
 
-                <a href="#kategori"
-                    class="hover:text-indigo-600 transition">
+                <a href="{{ route('categories') }}"
+                    class="{{ request()->routeIs('categories') ? 'text-indigo-600 font-semibold' : 'text-slate-700 hover:text-indigo-600' }} transition">
                     Kategori
                 </a>
 
-                <a href="#footer"
-                    class="hover:text-indigo-600 transition">
+                <a href="{{ route('about') }}"
+                    class="{{ request()->routeIs('about') ? 'text-indigo-600 font-semibold' : 'text-slate-700 hover:text-indigo-600' }} transition">
                     Tentang Kami
                 </a>
 
@@ -261,7 +282,7 @@
     @yield('content')
 
     <!-- Footer -->
-    <footer class="bg-indigo-900 text-indigo-100 py-20 px-6 mt-20">
+    <footer class="bg-indigo-900 text-indigo-100 py-20 px-6 mt-20 no-print">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
             <div class="space-y-4 col-span-2">
                 <div class="flex items-center gap-2">
@@ -285,7 +306,7 @@
                 <h4 class="text-white font-bold mb-6">Hubungi Kami</h4>
                 <ul class="space-y-4">
                     <li>support@eventtiket.com</li>
-                    <li>+62 812 3456 7890</li>
+                    <li>+62 858 7606 9336</li>
                 </ul>
             </div>
         </div>
