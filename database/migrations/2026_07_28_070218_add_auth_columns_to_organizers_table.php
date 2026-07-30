@@ -12,18 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('organizers', function (Blueprint $table) {
-
-            $table->string('email')->nullable()->after('name');
-
-            $table->string('password')->nullable()->after('email');
-
+            $table->string('email')->nullable();
+            $table->string('password')->nullable();
             $table->rememberToken();
-
             $table->enum('status', [
                 'pending',
                 'approved',
                 'rejected'
-            ])->default('pending')->after('description');
+            ])->default('pending');
         });
     }
 
