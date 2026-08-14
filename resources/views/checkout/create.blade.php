@@ -64,20 +64,70 @@
 
                 <div class="flex justify-between text-slate-500">
                     <span>Harga Tiket</span>
-                    <span>Rp {{ number_format($event->price, 0, ',', '.') }}</span>
+
+                    @if($event->price == 0)
+
+                    <span class="font-semibold text-green-600">
+                        GRATIS
+                    </span>
+
+                    @else
+
+                    <span>
+                        Rp {{ number_format($event->price, 0, ',', '.') }}
+                    </span>
+
+                    @endif
+
                 </div>
+
+                @if($event->price > 0)
 
                 <div class="flex justify-between text-slate-500">
                     <span>Biaya Layanan</span>
                     <span>Rp 5.000</span>
                 </div>
 
+                @else
+
+                <div class="flex justify-between text-green-600">
+                    <span>Pembayaran</span>
+                    <span>Tidak diperlukan</span>
+                </div>
+
+                @endif
+
                 <div class="flex justify-between text-2xl font-black mt-4 pt-4 border-t">
+
                     <span>Total Bayar</span>
+
+                    @if($event->price == 0)
+
+                    <span class="text-green-600">
+                        GRATIS
+                    </span>
+
+                    @else
+
                     <span class="text-indigo-600">
                         Rp {{ number_format($event->price + 5000, 0, ',', '.') }}
                     </span>
+
+                    @endif
+
                 </div>
+
+                @if($event->price == 0)
+
+                <div class="mt-4 p-4 rounded-2xl bg-green-50 border border-green-200">
+
+                    <p class="text-green-700 font-semibold">
+                        🎉 Event ini GRATIS. Setelah menekan tombol <b>Pesan Tiket</b>, tiket akan langsung diterbitkan tanpa melalui pembayaran Midtrans.
+                    </p>
+
+                </div>
+
+                @endif
 
             </div>
 
@@ -87,7 +137,7 @@
         <div class="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
 
             <h3 class="text-xl font-bold mb-6 italic text-indigo-600 underline underline-offset-8">
-                📦 Data Pemesan (Tanpa Login)
+                Data Pemesan
             </h3>
 
             <form action="{{ route('checkout.store', $event->id) }}"

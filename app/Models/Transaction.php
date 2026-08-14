@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Transaction extends Model
 {
     protected $fillable = [
+        'user_id',
         'event_id',
         'order_id',
         'customer_name',
@@ -16,8 +17,19 @@ class Transaction extends Model
         'status',
         'snap_token'
     ];
+
     public function event()
     {
         return $this->belongsTo(Event::class);
+    }
+
+    public function review()
+    {
+        return $this->hasOne(Review::class, 'transaction_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

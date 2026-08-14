@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Organizer;
+use Illuminate\Validation\Rule;
 
 class EventController extends Controller
 {
@@ -21,7 +23,13 @@ class EventController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.events.create', compact('categories'));
+
+        $organizers = Organizer::where('status', 'approved')->get();
+
+        return view('admin.events.create', compact(
+            'categories',
+            'organizers'
+        ));
     }
 
     // 🔹 STORE (simpan data)
@@ -29,6 +37,11 @@ class EventController extends Controller
     {
         // Menerapkan validasi data request dari pengguna
         $data = $request->validate([
+            'organizer_id' => [
+                'required',
+                Rule::exists('organizers', 'id')
+                    ->where('status', 'approved'),
+            ],
             'category_id' => 'required|exists:categories,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -36,9 +49,8 @@ class EventController extends Controller
             'location' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|numeric|min:1',
-            'poster' => 'nullable|image|max:2048' // Maksimal 2MB
+            'poster' => 'nullable|image|max:2048'
         ]);
-
         if ($request->hasFile('poster')) {
             // Simpan ke direktori storage/app/public/posters
             $data['poster_path'] = $request->file('poster')->store('posters', 'public');
@@ -70,17 +82,25 @@ class EventController extends Controller
             ->route('admin.events.index')
             ->with('success', 'Data event berhasil dihapus secara permanen.');
     }
-    
+
     public function edit(Event $event)
     {
         $categories = Category::all();
-        return view('admin.events.edit', compact('event', 'categories'));
+
+        $organizers = Organizer::where('status', 'approved')->get();
+
+        return view('admin.events.edit', compact(
+            'event',
+            'categories',
+            'organizers'
+        ));
     }
 
     // 🔹 Proses update data
     public function update(Request $request, Event $event)
     {
         $data = $request->validate([
+            'organizer_id' => 'required|exists:organizers,id',
             'category_id' => 'required|exists:categories,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',

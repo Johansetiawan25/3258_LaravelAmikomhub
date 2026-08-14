@@ -32,6 +32,46 @@
             </select>
         </div>
 
+        <!-- Organizer -->
+        <div>
+            <label class="block text-sm font-bold mb-2">
+                Penyelenggara / Organizer
+            </label>
+
+            <select
+                name="organizer_id"
+                class="w-full px-5 py-4 bg-slate-50 rounded-2xl"
+                required>
+
+
+                <option value="">
+                    Pilih Organizer
+                </option>
+
+
+                @foreach($organizers as $organizer)
+
+                <option value="{{ $organizer->id }}"
+                    {{ old('organizer_id', $event->organizer_id) == $organizer->id ? 'selected' : '' }}>
+
+                    {{ $organizer->name }}
+
+                </option>
+
+                @endforeach
+
+
+            </select>
+
+
+            @error('organizer_id')
+            <span class="text-red-500 text-sm">
+                {{ $message }}
+            </span>
+            @enderror
+
+        </div>
+
         <!-- Deskripsi -->
         <div>
             <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Deskripsi</label>

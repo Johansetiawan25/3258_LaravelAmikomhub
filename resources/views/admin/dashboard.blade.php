@@ -6,7 +6,7 @@
 @section('content')
 
 <!-- Stats Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-10">
 
     <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
         <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-4">
@@ -80,7 +80,80 @@
         </h3>
     </div>
 
+
+    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+
+        <div class="w-12 h-12 bg-cyan-50 text-cyan-600 rounded-2xl flex items-center justify-center mb-4">
+
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17 20h5V4H2v16h5m10 0v-4H7v4m10 0H7">
+                </path>
+            </svg>
+
+        </div>
+
+        <p class="text-slate-400 text-sm font-bold uppercase mb-1">
+            Total Organizer
+        </p>
+
+        <h3 class="text-2xl font-black">
+            {{ $totalOrganizers }}
+        </h3>
+
+    </div>
+
+
+
+    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+
+        <div class="w-12 h-12 bg-yellow-50 text-yellow-600 rounded-2xl flex items-center justify-center mb-4">
+
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 8v4l3 3">
+                </path>
+            </svg>
+
+        </div>
+
+        <p class="text-slate-400 text-sm font-bold uppercase mb-1">
+            Organizer Pending
+        </p>
+
+        <h3 class="text-2xl font-black">
+            {{ $pendingOrganizers }}
+        </h3>
+
+    </div>
+
 </div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+
+    <div class="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm">
+
+        <h3 class="text-xl font-black mb-6">
+            📈 Pendapatan Bulanan
+        </h3>
+
+        <div id="revenueChart"></div>
+
+    </div>
+
+
+    <div class="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm">
+
+        <h3 class="text-xl font-black mb-6">
+            📊 Jumlah Transaksi
+        </h3>
+
+        <div id="transactionChart"></div>
+
+    </div>
+
+</div>
+
 
 <!-- Latest Sales Table -->
 <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
@@ -97,6 +170,8 @@
         </a>
 
     </div>
+
+
 
     <div class="overflow-x-auto">
 
@@ -197,5 +272,216 @@
     </div>
 
 </div>
+
+<div class="bg-white rounded-3xl border border-slate-100 shadow-sm mt-8">
+
+    <div class="p-8 border-b">
+
+        <h3 class="font-black text-xl">
+            Top 5 Event Terlaris
+        </h3>
+
+    </div>
+
+    <div class="overflow-x-auto">
+
+        <table class="w-full">
+
+            <thead class="bg-slate-50 text-slate-500 uppercase text-[11px] tracking-wider">
+
+                <tr>
+
+                    <th class="px-8 py-4 text-left">
+                        Event
+                    </th>
+
+                    <th class="px-8 py-4 text-right">
+                        Tiket Terjual
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody class="divide-y">
+
+                @forelse($topEvents as $event)
+
+                <tr class="hover:bg-slate-50">
+
+                    <td class="px-8 py-5 font-medium">
+                        {{ $event->title }}
+                    </td>
+
+                    <td class="px-8 py-5 text-right font-black text-indigo-600">
+                        {{ $event->sold_ticket }}
+                    </td>
+
+                </tr>
+
+                @empty
+
+                <tr>
+
+                    <td colspan="2" class="text-center py-8 text-slate-400">
+                        Belum ada data penjualan.
+                    </td>
+
+                </tr>
+
+                @endforelse
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+@push('scripts')
+
+<script>
+    const months = @json(array_values($months));
+
+    const revenue = @json($revenueChart);
+
+    const transaction = @json($transactionChart);
+
+
+    // =======================
+    // Grafik Pendapatan
+    // =======================
+
+    new ApexCharts(document.querySelector("#revenueChart"), {
+
+        chart: {
+            type: 'area',
+            height: 340,
+            toolbar: {
+                show: false
+            },
+            zoom: {
+                enabled: false
+            },
+            animations: {
+                enabled: true,
+                easing: 'easeinout',
+                speed: 900
+            }
+        },
+
+        series: [{
+            name: 'Pendapatan',
+            data: revenue
+        }],
+
+        xaxis: {
+            categories: months
+        },
+
+        stroke: {
+            curve: 'smooth',
+            width: 4
+        },
+
+        markers: {
+            size: 5
+        },
+
+        dataLabels: {
+            enabled: false
+        },
+
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shadeIntensity: 1,
+                opacityFrom: 0.6,
+                opacityTo: 0.1
+            }
+        },
+
+        yaxis: {
+            labels: {
+                formatter: function(value) {
+
+                    if (value >= 1000000) {
+                        return 'Rp ' + (value / 1000000).toFixed(1) + ' Jt';
+                    }
+
+                    if (value >= 1000) {
+                        return 'Rp ' + (value / 1000).toFixed(0) + ' Rb';
+                    }
+
+                    return 'Rp ' + value;
+                }
+            }
+        },
+
+        tooltip: {
+            y: {
+                formatter: function(value) {
+                    return 'Rp ' + value.toLocaleString('id-ID');
+                }
+            }
+        }
+
+    }).render();
+
+
+
+
+    // =======================
+    // Grafik Transaksi
+    // =======================
+
+    new ApexCharts(document.querySelector("#transactionChart"), {
+
+        chart: {
+            type: 'bar',
+            height: 340,
+            toolbar: {
+                show: false
+            },
+            animations: {
+                enabled: true,
+                easing: 'easeinout',
+                speed: 900
+            }
+        },
+
+        series: [{
+            name: 'Jumlah Transaksi',
+            data: transaction
+        }],
+
+        xaxis: {
+            categories: months
+        },
+
+        dataLabels: {
+            enabled: false
+        },
+
+        plotOptions: {
+            bar: {
+                borderRadius: 8,
+                columnWidth: '45%'
+            }
+        },
+
+        tooltip: {
+            y: {
+                formatter: function(value) {
+                    return value + ' transaksi';
+                }
+            }
+        }
+
+    }).render();
+</script>
+
+@endpush
 
 @endsection

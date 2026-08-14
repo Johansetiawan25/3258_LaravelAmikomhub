@@ -30,7 +30,7 @@
                 Tambah Partner
             </a>
         </div>
-        
+
     </div>
 
     <!-- Search -->

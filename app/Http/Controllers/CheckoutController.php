@@ -11,6 +11,12 @@ class CheckoutController extends Controller
 {
     public function create(Event $event)
     {
+        if ($event->date < now()) {
+            return redirect()
+                ->route('events.show', $event)
+                ->with('error', 'Event ini telah berakhir dan tiket sudah tidak dapat dipesan.');
+        }
+        
         // Mengambil daftar kategori untuk keperluan menu footer
         $categories = \App\Models\Category::all();
 
@@ -31,12 +37,17 @@ class CheckoutController extends Controller
             return back()->with('error', 'Mohon maaf, tiket untuk acara ini sudah habis.');
         }
 
-        // 3. Generate Kode TRX (Unik)
+        // 3. Generate Kode Transaksi
         $orderId = 'TRX-' . time() . '-' . Str::random(5);
-        $totalPrice = $event->price + 5000; // Menambahkan biaya admin (dummy)
+
+        // Jika event gratis maka total = 0
+        $totalPrice = $event->price == 0
+            ? 0
+            : $event->price + 5000;
 
         // 4. Merekam Transaksi ke Database
         $transaction = Transaction::create([
+            'user_id'         => auth()->id(),
             'event_id'        => $event->id,
             'order_id'        => $orderId,
             'customer_name'   => $request->customer_name,
@@ -45,6 +56,41 @@ class CheckoutController extends Controller
             'total_price'     => $totalPrice,
             'status'          => 'Pending',
         ]);
+
+        /*
+|--------------------------------------------------------------------------
+| EVENT GRATIS
+|--------------------------------------------------------------------------
+*/
+
+        if ($event->price == 0) {
+
+            // langsung sukses
+            $transaction->update([
+                'status' => 'success'
+            ]);
+
+            // kurangi stok
+            $event->decrement('stock');
+
+            // kirim e-ticket
+            try {
+
+                \Illuminate\Support\Facades\Mail::to(
+                    $transaction->customer_email
+                )->send(
+                    new \App\Mail\EventTicketMail($transaction)
+                );
+            } catch (\Exception $e) {
+
+                \Log::error($e->getMessage());
+            }
+
+            return redirect()->route(
+                'checkout.success',
+                $transaction->order_id
+            );
+        }
 
 
         // ======================
@@ -98,6 +144,19 @@ class CheckoutController extends Controller
         $transaction = Transaction::with('event')
             ->where('order_id', $order_id)
             ->firstOrFail();
+
+        /*
+|--------------------------------------------------------------------------
+| EVENT GRATIS
+|--------------------------------------------------------------------------
+*/
+        if ($transaction->total_price == 0) {
+
+            return view(
+                'checkout.success',
+                compact('transaction', 'categories')
+            );
+        }
 
         \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
         \Midtrans\Config::$isProduction = false;

@@ -17,6 +17,27 @@
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(10px);
         }
+
+        @media print {
+
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background: white !important;
+            }
+
+            .ticket-print {
+                margin: 0 auto !important;
+                padding: 0 !important;
+                max-width: 700px !important;
+            }
+
+            @page {
+                margin: 10mm;
+            }
+        }
     </style>
 </head>
 
@@ -24,30 +45,244 @@
 
     <!-- Navigation -->
     <nav
-        class="glass sticky top-8 z-40 mx-4 mt-4 px-6 py-4 rounded-2xl border border-white/20 shadow-lg flex justify-between items-center">
-        <div class="flex items-center gap-2">
-            <div
-                class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">
-                AH</div>
-            <span class="text-xl font-bold tracking-tight">AmikomEventHub</span>
+        class="glass sticky top-8 z-40 mx-4 mt-4 px-6 py-4 rounded-2xl border border-white/20 shadow-lg flex items-center no-print">
+
+        <!-- Logo -->
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">
+                AH
+            </div>
+
+            <span class="text-xl font-bold tracking-tight">
+                AmikomEventHub
+            </span>
         </div>
 
-        <div class="hidden md:flex gap-8 font-medium">
-            <a href="#" class="text-indigo-600">Jelajahi</a>
-            <a href="#" class="hover:text-indigo-600 transition">Kategori</a>
-            <a href="#" class="hover:text-indigo-600 transition">Tentang Kami</a>
+        <!-- Menu -->
+        <div class="flex-1 flex justify-center">
+            <div class="hidden md:flex items-center gap-10 font-medium">
+
+                <a href="{{ route('home') }}"
+                    class="{{ request()->routeIs('home') ? 'text-indigo-600 font-semibold' : 'text-slate-700 hover:text-indigo-600' }} transition">
+                    Jelajahi
+                </a>
+
+                <a href="{{ route('categories') }}"
+                    class="{{ request()->routeIs('categories') ? 'text-indigo-600 font-semibold' : 'text-slate-700 hover:text-indigo-600' }} transition">
+                    Kategori
+                </a>
+
+                <a href="{{ route('about') }}"
+                    class="{{ request()->routeIs('about') ? 'text-indigo-600 font-semibold' : 'text-slate-700 hover:text-indigo-600' }} transition">
+                    Tentang Kami
+                </a>
+
+            </div>
         </div>
-        <!-- <div class="flex gap-3">
-            <button class="px-5 py-2.5 rounded-xl font-semibold hover:bg-slate-200 transition">Login</button>
-            <button
-                class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-semibold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition">Daftar</button>
-        </div> -->
+
+        <!-- Login / User -->
+        <div class="flex items-center gap-3">
+
+            @guest
+
+            <a href="{{ route('login') }}"
+                class="px-5 py-2.5 rounded-xl border border-slate-300 font-semibold hover:bg-slate-100 transition">
+
+                Masuk
+
+            </a>
+
+            <a href="{{ route('register') }}"
+                class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-semibold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition">
+
+                Daftar
+
+            </a>
+
+            @else
+
+            <div class="relative">
+
+                <!-- Toggle -->
+                <input
+                    type="checkbox"
+                    id="userMenu"
+                    class="peer hidden">
+
+
+                <!-- Button -->
+                <label
+                    for="userMenu"
+                    class="cursor-pointer flex items-center gap-3 px-3 py-2 rounded-xl border border-slate-300 hover:bg-slate-100 transition">
+
+
+                    <div
+                        class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold">
+
+                        {{ strtoupper(substr(Auth::user()->name,0,1)) }}
+
+                    </div>
+
+
+                    <div class="hidden lg:block text-left">
+
+                        <p class="font-bold text-sm leading-none">
+                            {{ Auth::user()->name }}
+                        </p>
+
+
+                        <p class="text-xs text-slate-500 mt-1">
+                            {{ Auth::user()->email }}
+                        </p>
+
+
+                    </div>
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 text-slate-500 transition peer-checked:rotate-180"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24">
+
+                        <path stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M19 9l-7 7-7-7" />
+
+                    </svg>
+
+
+                </label>
+
+
+
+                <!-- Dropdown -->
+                <div
+                    class="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden
+        opacity-0 invisible scale-95 transition duration-200
+        peer-checked:opacity-100 peer-checked:visible peer-checked:scale-100 z-50">
+
+
+                    <!-- Header -->
+
+                    <div class="px-5 py-4 border-b border-slate-100">
+
+                        <p class="font-bold text-slate-800">
+                            {{ Auth::user()->name }}
+                        </p>
+
+
+                        <p class="text-xs text-slate-500 mt-1">
+                            {{ Auth::user()->email }}
+                        </p>
+
+
+                    </div>
+
+
+
+                    <!-- Menu -->
+
+                    <div class="py-2">
+
+
+                        <a href="#"
+                            class="block px-5 py-3 text-sm text-slate-700 hover:bg-slate-100 transition">
+
+                            Profil Saya
+
+                        </a>
+
+
+
+                        <a href="{{ route('ticket') }}"
+                            class="block px-5 py-3 text-sm text-slate-700 hover:bg-slate-100 transition">
+
+                            Tiket Saya
+
+                        </a>
+
+
+
+                        <a href="#"
+                            class="block px-5 py-3 text-sm text-slate-700 hover:bg-slate-100 transition">
+
+                            Riwayat Transaksi
+
+                        </a>
+
+
+                    </div>
+
+
+
+                    <!-- Setting -->
+
+                    <div class="border-t border-slate-100 py-2">
+
+
+                        <a href="#"
+                            class="block px-5 py-3 text-sm text-slate-700 hover:bg-slate-100 transition">
+
+                            Pengaturan Akun
+
+                        </a>
+
+
+
+                        <a href="#"
+                            class="block px-5 py-3 text-sm text-slate-700 hover:bg-slate-100 transition">
+
+                            Ubah Password
+
+                        </a>
+
+
+                    </div>
+
+
+
+                    <!-- Logout -->
+
+                    <div class="border-t border-slate-100 py-2">
+
+
+                        <form action="{{ route('logout') }}" method="POST">
+
+                            @csrf
+
+
+                            <button
+                                class="w-full text-left px-5 py-3 text-sm text-red-600 hover:bg-red-50 transition">
+
+                                Logout
+
+                            </button>
+
+
+                        </form>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            @endguest
+
+        </div>
+
     </nav>
 
     @yield('content')
 
     <!-- Footer -->
-    <footer class="bg-indigo-900 text-indigo-100 py-20 px-6 mt-20">
+    <footer class="bg-indigo-900 text-indigo-100 py-20 px-6 mt-20 no-print">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
             <div class="space-y-4 col-span-2">
                 <div class="flex items-center gap-2">
@@ -71,7 +306,7 @@
                 <h4 class="text-white font-bold mb-6">Hubungi Kami</h4>
                 <ul class="space-y-4">
                     <li>support@eventtiket.com</li>
-                    <li>+62 812 3456 7890</li>
+                    <li>+62 858 7606 9336</li>
                 </ul>
             </div>
         </div>
@@ -81,6 +316,7 @@
     </footer>
 
     @yield('scripts')
+
 
 </body>
 
