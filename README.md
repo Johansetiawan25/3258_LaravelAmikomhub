@@ -54,7 +54,7 @@ Aplikasi telah tersedia dalam versi online dan dapat digunakan untuk mencoba fit
 
 🚀 **Production / Railway:**
 
-**https://YOUR-RAILWAY-URL.up.railway.app**
+**3258laravelamikomhub-production.up.railway.app**
 
 > **Catatan:** Sistem pembayaran menggunakan **Midtrans Sandbox** untuk kebutuhan pengujian dan pembelajaran.
 
