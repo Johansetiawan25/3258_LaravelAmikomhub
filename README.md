@@ -76,7 +76,7 @@ bisa login pakai google
 ### 🏢 Organizer
 
 ```text
-Email    : Johan@gmail.com
+Email    : johan@gmail.com
 Password : Johan123
 ```
 
